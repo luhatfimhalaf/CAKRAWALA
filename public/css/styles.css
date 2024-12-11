@@ -71,3 +71,26 @@ img {
     background-color: #19535f;
     color: #ffffff;
 }
+
+/* Navbar Styling */
+.navbar {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.nav-link {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.navbar-brand img {
+    border-radius: 5px;
+}
+
+.search-bar input {
+    width: 250px;
+    border-radius: 20px;
+}
+
+.nav-item .nav-link i {
+    font-size: 18px;
+}
