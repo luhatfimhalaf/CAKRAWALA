@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Sign Up</title>
     <!-- Add Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Google Fonts -->
@@ -19,7 +19,7 @@
             justify-content: center;
             align-items: center;
         }
-        .login-container {
+        .signup-container {
             display: flex;
             flex-direction: row;
             justify-content: center;
@@ -31,20 +31,20 @@
             max-width: 1100px;
             width: 100%;
         }
-        .login-form {
+        .signup-form {
             background-color: #f8f9fa;
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
             width: 100%;
         }
-        .login-image img {
+        .signup-image img {
             border-radius: 10px;
             max-width: 100%;
             height: auto;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
         }
-        .login-button {
+        .signup-button {
             background-color: #19535f;
             color: white;
             border-radius: 50px;
@@ -52,8 +52,16 @@
             transition: all 0.3s ease;
             font-weight: bold;
         }
-        .login-button:hover {
+        .signup-button:hover {
             background-color: #457b9d;
+        }
+        .social-buttons i {
+            font-size: 1.5rem;
+            margin-right: 15px;
+            color: #19535f;
+        }
+        .social-buttons a:hover i {
+            color: #457b9d;
         }
         .form-control {
             border-radius: 25px;
@@ -75,6 +83,9 @@
         a:hover {
             text-decoration: underline;
         }
+        .text-muted {
+            color: #777;
+        }
         .forgot-password {
             font-size: 0.9rem;
             text-align: center;
@@ -85,50 +96,37 @@
         }
         /* Media Queries */
         @media (max-width: 768px) {
-            .login-container {
+            .signup-container {
                 flex-direction: column;
                 padding: 20px;
             }
-            .login-form {
+            .signup-form {
                 width: 100%;
                 margin-bottom: 20px;
             }
-            .login-image img {
+            .signup-image img {
                 max-height: 350px;
                 object-fit: cover;
             }
-        }
-        /* Styling for social media buttons */
-        .social-buttons a {
-            font-size: 24px;
-            margin: 0 10px; /* Adds space between the icons */
-            color: #19535f;
-        }
-        .social-buttons a:hover {
-            color: #457b9d;
         }
     </style>
 </head>
 <body>
 
-<div class="login-container">
+<div class="signup-container">
     <!-- Left Form Section -->
-    <div class="login-form">
-        <h2 class="fw-bold mb-4 text-center text-primary">Welcome Back</h2>
-
-        <!-- Display error messages -->
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-
-        <form method="POST" action="{{ route('login') }}">
+    <div class="signup-form">
+        <h2 class="fw-bold mb-4 text-center text-primary">Create Your Account</h2>
+        <form method="POST" action="{{ route('register') }}">
             @csrf <!-- Laravel CSRF Token -->
+            <div class="mb-3">
+                <label for="name" class="form-label">Full Name *</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="Full Name" required>
+            </div>
+            <div class="mb-3">
+                <label for="phone" class="form-label">Phone *</label>
+                <input type="text" class="form-control" id="phone" name="phone" placeholder="Phone Number" required>
+            </div>
             <div class="mb-3">
                 <label for="email" class="form-label">Email *</label>
                 <input type="email" class="form-control" id="email" name="email" placeholder="Email Address" required>
@@ -137,23 +135,27 @@
                 <label for="password" class="form-label">Password *</label>
                 <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
             </div>
+            <div class="mb-3">
+                <label for="password_confirmation" class="form-label">Confirm Password *</label>
+                <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Confirm Password" required>
+            </div>
             <div class="d-grid gap-2">
-                <button type="submit" class="btn login-button">Log In</button>
+                <button type="submit" class="btn signup-button">Sign Up</button>
             </div>
         </form>
-        <div class="text-center my-3">or log in with</div>
+        <div class="text-center my-3">or sign up with</div>
         <div class="d-flex justify-content-center social-buttons">
             <a href="#"><i class="bi bi-apple"></i></a>
             <a href="#"><i class="bi bi-google"></i></a>
             <a href="#"><i class="bi bi-facebook"></i></a>
         </div>
         <div class="text-center mt-4 forgot-password">
-            <small>Don't have an account? <a href="{{ route('register') }}">Sign Up</a></small>
+            <small>Already have an account? <a href="{{ route('login') }}">Sign In</a></small>
         </div>
     </div>
     <!-- Right Image Section -->
-    <div class="col-md-6 d-none d-md-block login-image">
-        <img src="{{ asset('images/Disability-Login.png') }}" alt="Login Image">
+    <div class="col-md-6 d-none d-md-block signup-image">
+        <img src="{{ asset('images/Disability Register.png') }}" alt="Signup Image">
     </div>
 </div>
 
