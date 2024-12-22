@@ -140,7 +140,7 @@
     </style>
 </head>
 <body>
-    
+
     <!-- Hero Section -->
     <section class="hero text-center text-md-start py-5 position-relative">
         <div class="container">
@@ -148,7 +148,7 @@
                 <div class="col-md-6">
                     <h1 class="fw-bold mb-4" style="font-size: 3rem; line-height: 1.2;">Raih Karier Impian, Tanpa Batasan</h1>
                     <p class="mb-4" style="font-size: 1.1rem;">
-                        Platform pelatihan digital untuk penyandang disabilitas, menuju dunia kerja yang inklusif.
+                        Platform pelatihan digital untuk penyandang disabilitas, menuju dunia kerja yang banyak gajinya.
                     </p>
                     <a href="{{ route('register') }}" class="btn btn-primary me-2">Daftar Sekarang</a>
                     <a href="#about" class="btn btn-outline-light">Tentang Kami</a>
