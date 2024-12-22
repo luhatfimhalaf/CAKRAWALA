@@ -106,7 +106,7 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav mx-auto">
                         <li class="nav-item">
-                        <a class="nav-link" href="{{ route('kursus.index') }}">Kursus</a>
+                        <a class="nav-link" href="#">Kursus</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('about-us.index') }}">Tentang Kami</a>

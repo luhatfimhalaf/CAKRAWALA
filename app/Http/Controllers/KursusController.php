@@ -76,7 +76,14 @@ class KursusController extends Controller
                 'image-mentor' => 'images\Emily Carter.png',
             ],
         ];
+        $query = $request->input('search'); // Ambil query dari input search
+        // Cari data kursus berdasarkan query (contoh menggunakan model Course)
+        $courses = Course::where('title', 'like', '%' . $query . '%')
+                         ->orWhere('description', 'like', '%' . $query . '%')
+                         ->get();
 
+        // Kirim hasil pencarian ke view
+        return view('kursus', compact('courses', 'query'));
         return view('kursus', compact('courses'));
     }
 }

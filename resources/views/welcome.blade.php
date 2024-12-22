@@ -151,7 +151,7 @@
                         Platform pelatihan digital untuk penyandang disabilitas, menuju dunia kerja yang inklusif.
                     </p>
                     <a href="{{ route('register') }}" class="btn btn-primary me-2">Daftar Sekarang</a>
-                    <a href="#about" class="btn btn-outline-light">Tentang Kami</a>
+                    <a href="{{ route('about-us.index') }}" class="btn btn-outline-light">Tentang Kami</a>
                 </div>
                 <div class="col-md-6 position-relative">
                     <img src="images/Group 23.png" alt="Hero Image" class="img-fluid float-md-end" style="border-radius: 20px; box-shadow: 0px 10px 30px rgba(0,0,0,0.3);">

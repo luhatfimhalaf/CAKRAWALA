@@ -10,47 +10,87 @@
 </div>
 
 <div class="container mt-5">
-    <div class="top-popular">
-        <span class="badge bg-info text-dark">TOP POPULAR COURSE</span>
-        <h2 class="text-center mb-5">Join the Best Courses on Edunity</h2>
-    </div>
+    @if(isset($query))
+        <h2>Search Results for: "{{ $query }}"</h2>
+        @if($courses->isEmpty())
+            <p>No courses found matching your query.</p>
+        @else
+            <div class="row">
+                @foreach($courses as $course)
+                    <div class="col-md-4">
+                        <div class="card course-card">
+                            <img src="{{ $course['image'] }}" class="card-img-top" alt="{{ $course['title'] }}">
 
-    <div class="row g-4">
-        @foreach ($courses as $course)
-        <div class="col-md-4">
-            <div class="card course-card">
-                <img src="{{ $course['image'] }}" class="card-img-top" alt="{{ $course['title'] }}">
+                            <div class="card-body">
+                                <span class="badge bg-primary mb-3">{{ $course['category'] }}</span>
+                                <h5 class="card-title">{{ $course['title'] }}</h5>
 
-                <div class="card-body">
-                    <span class="badge bg-primary mb-3">{{ $course['category'] }}</span>
-                    <h5 class="card-title">{{ $course['title'] }}</h5>
+                                <!-- Course Info -->
+                                <div class="course-info my-4">
+                                    <span>Lessons {{ $course['lessons'] }}</span> | 
+                                    <span>Duration {{ $course['duration'] }}</span> | 
+                                    <span>Students {{ $course['students'] }}</span>
+                                </div>
 
-                    <!-- Course Info -->
-                    <div class="course-info my-4">
-                        <span>Lessons {{ $course['lessons'] }}</span> | 
-                        <span>Duration {{ $course['duration'] }}</span> | 
-                        <span>Students {{ $course['students'] }}</span>
+                                <!-- Instructor Info -->
+                                <div class="d-flex align-items-center my-3">
+                                    <img src="{{ $course['image-mentor'] }}" alt="Instructor Photo" class="rounded-circle me-2" style="width: 40px; height: 40px;">
+                                    <span class="text-muted">By {{ $course['instructor'] }}</span>
+                                </div>
+
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <p class="price mb-0"><strong>Rp{{ $course['price'] }}</strong></p>
+                                    <a href="#" class="btn btn-enroll">Enroll</a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                @endforeach
+            </div>
+        @endif
+    @else
+        <div class="top-popular">
+            <span class="badge bg-info text-dark">TOP POPULAR COURSE</span>
+            <h2 class="text-center mb-5">Join the Best Courses on Edunity</h2>
+        </div>
 
-                    <!-- Instructor Info -->
-                    <div class="d-flex align-items-center my-3">
-                        <img src="{{ $course['image-mentor'] }}" alt="Instructor Photo" class="rounded-circle me-2" style="width: 40px; height: 40px;">
-                        <span class="text-muted">By {{ $course['instructor'] }}</span>
-                    </div>
+        <div class="row g-4">
+            @foreach ($courses as $course)
+            <div class="col-md-4">
+                <div class="card course-card">
+                    <img src="{{ $course['image'] }}" class="card-img-top" alt="{{ $course['title'] }}">
 
-                    <div class="d-flex justify-content-between align-items-center">
-                        <p class="price mb-0"><strong>Rp{{ $course['price'] }}</strong></p>
-                        <a href="#" class="btn btn-enroll">Enroll</a>
+                    <div class="card-body">
+                        <span class="badge bg-primary mb-3">{{ $course['category'] }}</span>
+                        <h5 class="card-title">{{ $course['title'] }}</h5>
+
+                        <!-- Course Info -->
+                        <div class="course-info my-4">
+                            <span>Lessons {{ $course['lessons'] }}</span> | 
+                            <span>Duration {{ $course['duration'] }}</span> | 
+                            <span>Students {{ $course['students'] }}</span>
+                        </div>
+
+                        <!-- Instructor Info -->
+                        <div class="d-flex align-items-center my-3">
+                            <img src="{{ $course['image-mentor'] }}" alt="Instructor Photo" class="rounded-circle me-2" style="width: 40px; height: 40px;">
+                            <span class="text-muted">By {{ $course['instructor'] }}</span>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center">
+                            <p class="price mb-0"><strong>Rp{{ $course['price'] }}</strong></p>
+                            <a href="#" class="btn btn-enroll">Enroll</a>
+                        </div>
                     </div>
                 </div>
             </div>
+            @endforeach
         </div>
-        @endforeach
-    </div>
 
-    <div class="text-center mt-4 mb-5">
-        <button class="btn btn-outline-info">Load More Courses</button>
-    </div>
+        <div class="text-center mt-4 mb-5">
+            <button class="btn btn-outline-info">Load More Courses</button>
+        </div>
+    @endif
 </div>
 @include('layouts.footer')
 @endsection
@@ -168,6 +208,7 @@
     }
 </style>
 @endpush
+
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 @endpush
