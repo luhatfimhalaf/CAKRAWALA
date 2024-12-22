@@ -15,6 +15,7 @@ Route::get('/kursus', function () {
 Route::get('/kursus', [KursusController::class, 'index'])->name('kursus.index');
 Route::view('/kursus', 'kursus')->name('kursus.index');
 Route::get('/kursus', [KursusController::class, 'index'])->name('kursus.index');
+Route::get('/kursus', [CourseController::class, 'search'])->name('kursus.search');
 
 // Rute untuk halaman About Us
 use App\Http\Controllers\AboutUsController;
