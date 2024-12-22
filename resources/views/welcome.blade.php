@@ -146,9 +146,9 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-md-6">
-                    <h1 class="fw-bold mb-4" style="font-size: 3rem; line-height: 1.2;">Raih Karier Impian, Tanpa Batasan</h1>
+                    <h1 class="fw-bold mb-4" style="font-size: 3rem; line-height: 1.2;">Meraih Karier Impian, Tanpa Batasan</h1>
                     <p class="mb-4" style="font-size: 1.1rem;">
-                        Platform pelatihan digital untuk penyandang disabilitas, menuju dunia kerja yang inklusif.
+                        Platform pelatihan digital untuk siapa, menuju dunia kerja yang inklusif.
                     </p>
                     <a href="{{ route('register') }}" class="btn btn-primary me-2">Daftar Sekarang</a>
                     <a href="{{ route('about-us.index') }}" class="btn btn-outline-light">Tentang Kami</a>
