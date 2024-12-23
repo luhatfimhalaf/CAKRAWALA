@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProfileController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -39,4 +41,11 @@ Route::view('/login', 'login')->name('login');
 Route::get('/dashboard', function () {
     return view('dashboard'); // Pastikan file view dashboard.blade.php ada
 })->name('dashboard')->middleware('auth'); // Tambahkan middleware auth agar hanya user yang login bisa mengaksesnya
+
+// Profile Routes
+Route::get('/profiles', [ProfileController::class, 'index']);
+Route::post('/profiles', [ProfileController::class, 'store']);
+Route::get('/profile/{id}', [ProfileController::class, 'show']);
+Route::put('/profiles/{id}', [ProfileController::class, 'update'])->name('profiles.update');
+Route::delete('/profiles/{id}', [ProfileController::class, 'destroy'])->name('profiles.destroy');
 
