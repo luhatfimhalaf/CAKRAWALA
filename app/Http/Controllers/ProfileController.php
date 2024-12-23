@@ -27,7 +27,7 @@ class ProfileController extends Controller
 
         $profile = Profile::create($validatedData);
 
-        return response()->json(['message' => 'Profile created successfully', 'profile' => $profile], 201);
+        return response()->json(['message' => 'Profile berhasil dibuat', 'profile' => $profile], 201);
     }
 
     // Display the specified profile
