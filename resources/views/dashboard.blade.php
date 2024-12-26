@@ -10,15 +10,35 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         body {
-            background-color: #f0f4f8;
+            background-color: #f8f9fa;
+            color: #19535f;
             font-family: 'Poppins', sans-serif;
+            height: 100vh; /* Ensure full height for body */
+            margin: 0;
+            display: flex; /* Flex container for sidebar and content */
+            flex-direction: column;
         }
+        .main-container {
+            flex: 1;
+            display: flex;
+            height: 100%; /* Full height for main content */
+            overflow: hidden;
+        }
+
         .sidebar {
             background-color: #19535f;
-            height: 100vh;
-            padding: 20px;
             color: #ffffff;
-            font-family: 'Poppins', sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 250px; /* Fixed width for sidebar */
+            height: 100%; /* Stretch sidebar to full height */
+            padding: 20px;
+        }
+        .sidebar h2 {
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 30px;
         }
         .sidebar a {
             color: #ffffff;
@@ -26,7 +46,7 @@
             display: flex;
             align-items: center;
             margin: 15px 0;
-            font-size: 18px;
+            font-size: 16px;
             transition: background-color 0.3s, color 0.3s;
             padding: 10px;
             border-radius: 5px;
@@ -38,10 +58,18 @@
             background-color: #133d47;
             color: #d1e8eb;
         }
+
         .sidebar a.active {
             background-color: #0f2e38;
             color: #d1e8eb;
         }
+        /* Main Content Styling */
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
         .content {
             padding: 30px;
         }
@@ -119,27 +147,28 @@
     </style>
 </head>
 <body>
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Sidebar -->
-            <div class="col-md-2 sidebar">
-                <h2 style="font-weight: 900;">CAKRAWALA.</h2>
-                <a href="#" class="active"><i class="bi bi-house"></i>Dashboard</a>
-                <a href="#"><i class="bi bi-book"></i>Courses</a>
-                <a href="#"><i class="bi bi bi-list-task"></i>Quiz</a>
-                <a href="#"><i class="bi bi-question-circle"></i>FAQ</a>
-                <a href="#"><i class="bi bi-bell"></i>Reminders</a>
-                <a href="#"><i class="bi bi-gear"></i>Settings</a>
-                <div class="mt-5">
-                    <div class="card text-center">
-                        <div class="card-body">
-                            <h5 class="card-title">Go Premium</h5>
-                            <p class="card-text">Explore 100+ expert curated courses prepared for you.</p>
-                            <button class="btn btn-primary">Get Access</button>
-                        </div>
+    <div class="main-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div>
+                <h2>CAKRAWALA</h2>
+                <a href="{{ route('dashboard') }}" class="active"><i class="bi bi-house"></i> Dashboard</a>
+                <a href="{{ route('kursus.index') }}"><i class="bi bi-book"></i> Courses</a>
+                <a href="#"><i class="bi bi-list-task"></i> Quiz</a>
+                <a href="{{ route('faq.index') }}"><i class="bi bi-question-circle"></i> FAQ</a>
+                <a href="#"><i class="bi bi-bell"></i> Notifications</a>
+                <a href="#"><i class="bi bi-gear"></i> Settings</a>
+            </div>
+            <div class="mt-auto">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">Go Premium</h5>
+                        <p class="card-text">Explore 100+ expert curated courses prepared for you.</p>
+                        <button class="btn btn-primary">Get Access</button>
                     </div>
                 </div>
             </div>
+        </div>
             <!-- Main Content -->
             <div class="col-md-7 content">
                 <div class="top-bar">
