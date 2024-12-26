@@ -109,10 +109,10 @@
                         <a class="nav-link" href="#">Kursus</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('about-us.index') }}">Tentang Kami</a>
+                            <a class="nav-link" href="#}">Tentang Kami</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('faq.index') }}">FAQ</a>
+                            <a class="nav-link" href="{#">FAQ</a>
                         </li>
                         <li class="nav-item">
                             <form class="d-flex search-bar" action="#" method="get">
