@@ -55,6 +55,19 @@ class UserAnswerController extends Controller
             if ($existingAnswer) {
                 $newAttempt = $existingAnswer->attempt + 1;
                 
+                // Cek jika attempt sudah mencapai 5
+                if ($newAttempt >= 5) {
+                    // Hapus semua data quiz untuk user ini
+                    UserAnswer::where('user_id', Auth::id())
+                        ->where('quiz_id', $request->quiz_id)
+                        ->delete();
+                    
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Anda telah mencapai batas maksimal 5 kali percobaan',
+                    ], 403);
+                }
+                
                 $existingAnswer->update([
                     'question_1' => $request->question_1,
                     'question_2' => $request->question_2,
