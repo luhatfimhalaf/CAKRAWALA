@@ -18,4 +18,14 @@ class Course extends Model
 
     public $incrementing = false; // Karena menggunakan UUID
     protected $keyType = 'string';
+
+    public function quiz()
+    {
+        return $this->hasMany(Quiz::class);
+    }
+
+    public function userAnswers()
+    {
+        return $this->hasMany(UserAnswer::class);
+    }
 }

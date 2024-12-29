@@ -141,8 +141,8 @@
             <div>
                 <h2>CAKRAWALA</h2>
                 <a href="{{ route('dashboard') }}"><i class="bi bi-house"></i> Dashboard</a>
-                <a href="{{ route('kursus.index') }}" class="active"><i class="bi bi-book"></i> Courses</a>
-                <a href="{{ route('quiz.index') }}"><i class="bi bi-list-task"></i> Quiz</a>
+                <a href="{{ route('kursus.index') }}"><i class="bi bi-book"></i> Courses</a>
+                <a href="{{ route('quiz.index') }}" class="active"><i class="bi bi-list-task"></i> Quiz</a>
                 <a href="{{ route('faq.index') }}"><i class="bi bi-question-circle"></i> FAQ</a>
                 <a href="#"><i class="bi bi-bell"></i> Notifications</a>
                 <a href="#"><i class="bi bi-gear"></i> Settings</a>
@@ -163,8 +163,8 @@
             <!-- Banner -->
             <div class="daftar-kursus-banner">
                 <div class="container">
-                    <h2>DAFTAR KURSUS</h2>
-                    <p class="text-muted">Pilih kursus terbaik yang sesuai dengan kebutuhan Anda.</p>
+                    <h2>DAFTAR KUIS</h2>
+                    <p class="text-muted">Pilih kuis yang Anda ingin kerjakan.</p>
                 </div>
             </div>
 
@@ -179,13 +179,12 @@
                         <span class="badge bg-primary mb-3">{{ ucfirst($course->category) }}</span>
                         <h5 class="card-title">{{ $course->title }}</h5>
                         <div class="course-info my-3">
-                            <span>Lessons: {{ $course->lessons }}</span> | 
-                            <span>Duration: {{ $course->duration }}</span> | 
-                            <span>Students: {{ $course->students }}</span>
+                            <span>Jumlah Soal : 5</span> | 
+                            <span>Durasi      : 10 Menit</span>
                         </div>
                         <div class="d-flex justify-content-between align-items-center">
                             <p class="price mb-0"><strong>Rp{{ number_format($course->price, 0, ',', '.') }}</strong></p>
-                            <a href="{{ route('kursus.detail', $course->id) }}" class="btn btn-enroll">Enroll</a>
+                            <a href="{{ route('quiz.show', $course->id) }}" class="btn btn-enroll">Mulai</a>
                         </div>
                     </div>
                 </div>
