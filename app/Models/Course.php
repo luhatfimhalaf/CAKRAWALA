@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Course extends Model
 {
@@ -19,13 +21,8 @@ class Course extends Model
     public $incrementing = false; // Karena menggunakan UUID
     protected $keyType = 'string';
 
-    public function quiz()
+    public function quiz(): HasMany
     {
-        return $this->hasMany(Quiz::class);
-    }
-
-    public function userAnswers()
-    {
-        return $this->hasMany(UserAnswer::class);
+        return $this->hasMany(Quiz::class, 'course_id', 'id');
     }
 }

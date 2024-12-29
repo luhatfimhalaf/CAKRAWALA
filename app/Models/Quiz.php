@@ -3,35 +3,35 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\Course;
-use App\Models\UserAnswer;
 
 class Quiz extends Model
 {
-    // Nama tabel
     protected $table = 'quiz';
-
-    // Kolom yang dapat diisi secara mass-assignment
+    
     protected $fillable = [
-        'course_id',
-        'question_no',
-        'question',
-        'answer_a',
-        'answer_b',
-        'answer_c',
-        'answer_d',
-        'right_answer',
-        'created_at',
-        'updated_at',
+        'title',
+        'description',
+        'course_id'
     ];
 
-    public function userAnswers()
+    /**
+     * Get the course that owns the quiz.
+     */
+    public function course(): BelongsTo
+    {
+        return $this->belongsTo(Course::class);
+    }
+
+    public function userAnswers(): HasMany
     {
         return $this->hasMany(UserAnswer::class, 'quiz_id', 'id');
     }
 
-    public function course()
+    public function questions(): HasMany
     {
-        return $this->belongsTo(Course::class, 'course_id');
+        return $this->hasMany(Question::class, 'quiz_id', 'id');
     }
 }

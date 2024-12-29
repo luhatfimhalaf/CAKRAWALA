@@ -70,6 +70,37 @@
             color: #6c757d;
             margin: 1rem 0;
         }
+
+        .answer-details-grid {
+            display: grid;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .user-answer, .correct-answer {
+            padding: 0.5rem;
+            border-radius: 5px;
+        }
+
+        .text-success {
+            color: #28a745 !important;
+        }
+
+        .text-danger {
+            color: #dc3545 !important;
+        }
+
+        .bi-check-circle-fill, .bi-x-circle-fill {
+            margin-left: 5px;
+        }
+
+        .user-answer {
+            padding: 0.5rem;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
     </style>
 </head>
 <body>
@@ -106,23 +137,28 @@
             </div>
 
             <div class="answer-details mt-5">
-                <h5 class="mb-4">Jawaban Anda:</h5>
-                @for ($i = 1; $i <= 5; $i++)
+                <h5 class="mb-4">Detail Jawaban:</h5>
+                @foreach($userAnswer->quiz->questions as $question)
                     @php
-                        $questionField = "question_$i";
+                        $questionNumber = $loop->iteration;
+                        $questionField = "question_" . $questionNumber;
                         $userAnswerValue = $userAnswer->$questionField;
-                        $quiz = $quizzes->where('question_no', $i)->first();
-                        $answerText = $quiz->{$userAnswerValue};
-                        $isCorrect = $userAnswerValue === $quiz->right_answer;
+                        $isCorrect = $userAnswerValue == $question->right_answer;
                     @endphp
                     <div class="answer-item {{ $isCorrect ? 'answer-correct' : 'answer-incorrect' }}">
-                        <h6>Soal {{ $i }}</h6>
-                        <p>{{ $quiz->question }}</p>
-                        <div>
-                            <strong>Jawaban Anda:</strong> {{ $answerText }}
+                        <h6>Soal {{ $questionNumber }}</h6>
+                        <p>{{ $question->question }}</p>
+                        <div class="answer-details-grid">
+                            <div class="user-answer">
+                                <div>
+                                    <strong>Jawaban Anda:</strong> 
+                                    {{ $userAnswerValue }}
+                                </div>
+                                <i class="bi {{ $isCorrect ? 'bi-check-circle-fill text-success' : 'bi-x-circle-fill text-danger' }}"></i>
+                            </div>
                         </div>
                     </div>
-                @endfor
+                @endforeach
             </div>
 
             <div class="text-center mt-4">
