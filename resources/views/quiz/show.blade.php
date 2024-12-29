@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body {
             margin: 0;
@@ -870,8 +871,14 @@
         .then(data => {
             if (!data.success) {
                 if (data.limitReached) {
-                    alert(data.message);
-                    window.location.href = data.redirect_url; 
+                    Swal.fire({
+                        title: 'Peringatan',
+                        text: data.message,
+                        icon: 'warning',
+                        confirmButtonText: 'OK'
+                    }).then((result) => {
+                        window.location.href = '/dashboard';
+                    });
                     return;
                 }
                 throw new Error(data.message);
@@ -883,7 +890,12 @@
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Terjadi kesalahan: ' + error.message);
+            Swal.fire({
+                title: 'Error',
+                text: 'Terjadi kesalahan: ' + error.message,
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
         });
     }
 
