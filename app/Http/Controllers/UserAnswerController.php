@@ -65,7 +65,8 @@ class UserAnswerController extends Controller
                     return response()->json([
                         'success' => false,
                         'message' => 'Anda telah mencapai batas maksimal 5 kali percobaan',
-                    ], 403);
+                        'limitReached' => true
+                    ]);
                 }
                 
                 $existingAnswer->update([

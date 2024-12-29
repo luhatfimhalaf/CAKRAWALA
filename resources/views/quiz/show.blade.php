@@ -865,22 +865,25 @@
             body: JSON.stringify(answers)
         })
         .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
             return response.json();
         })
         .then(data => {
-            if (data.success) {
-                // Redirect ke halaman result jika berhasil
+            if (!data.success) {
+                if (data.limitReached) {
+                    alert(data.message);
+                    window.location.href = data.redirect_url; 
+                    return;
+                }
+                throw new Error(data.message);
+            }
+            // handle successful response
+            if (data.redirect_url) {
                 window.location.href = data.redirect_url;
-            } else {
-                throw new Error(data.message || 'Terjadi kesalahan saat menyimpan jawaban');
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Terjadi kesalahan saat menyimpan jawaban: ' + error.message);
+            alert('Terjadi kesalahan: ' + error.message);
         });
     }
 
