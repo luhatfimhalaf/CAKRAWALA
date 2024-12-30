@@ -60,7 +60,6 @@ Route::get('/transactions/{id}', [TransactionController::class, 'show'])->name('
 Route::get('/transactions/{id}/pay', [TransactionController::class, 'simulatePayment'])->name('transactions.pay');
 Route::post('/transactions', [TransactionController::class, 'store'])->name('transactions.store');
 
-
 use App\Http\Controllers\CourseController;
 Route::get('/kursus', [CourseController::class, 'index'])->name('kursus.index');
 Route::get('/kursus/{id}', [CourseController::class, 'show'])->name('kursus.detail');
@@ -72,6 +71,14 @@ Route::post('/payment/create', [PaymentController::class, 'createPayment'])->nam
 Route::get('/pay-course/{id}', [PaymentController::class, 'payCourse'])->name('pay.course');
 Route::post('/payment', [PaymentController::class, 'createPayment']);
 
-
-
+use App\Http\Controllers\QuizController;
+use App\Http\Controllers\UserAnswerController;
+use App\Http\Controllers\QuestionController;
+// Quiz routes
+Route::prefix('quiz')->group(function () {
+    Route::get('/', [QuizController::class, 'index'])->name('quiz.index');
+    Route::get('/{id}', [QuizController::class, 'show'])->name('quiz.show');
+    Route::get('/{id}/result', [UserAnswerController::class, 'result'])->name('quiz.result');
+    Route::post('/submit', [UserAnswerController::class, 'submit'])->name('quiz.submit');
+});
 
