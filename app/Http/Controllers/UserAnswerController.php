@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\UserAnswer;
+use App\Models\Certificate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Services\CertificateService;
 
 class UserAnswerController extends Controller
 {
@@ -47,6 +49,30 @@ class UserAnswerController extends Controller
             $score = ($totalQuestions > 0) ? ($correctAnswers / $totalQuestions) * 100 : 0;
             $roundedScore = round($score);
 
+            // Debug score calculation
+            \Log::info('Score calculation result:', [
+                'correctAnswers' => $correctAnswers,
+                'totalQuestions' => $totalQuestions,
+                'score' => $score,
+                'roundedScore' => $roundedScore
+            ]);
+
+            // Check if score meets certificate criteria
+            \Log::info('Before certificate generation check:', [
+                'score' => $score,
+                'condition_met' => $score >= 80
+            ]);
+
+            if ($score >= 80) {
+                $certificate = Certificate::create([
+                    'user_id' => Auth::id(),
+                    'quiz_id' => $request->quiz_id,
+                    'certificate_number' => Certificate::generateCertificateNumber(),
+                    'score' => $roundedScore,
+                    'completion_date' => now()
+                ]);
+            }
+
             // Cek apakah sudah ada jawaban untuk quiz ini
             $existingAnswer = UserAnswer::where('user_id', Auth::id())
                 ->where('quiz_id', $request->quiz_id)
@@ -56,7 +82,7 @@ class UserAnswerController extends Controller
                 $newAttempt = $existingAnswer->attempt + 1;
                 
                 // Cek jika attempt sudah mencapai 5
-                if ($newAttempt >= 5) {
+                if ($newAttempt > 5) {
                     // Hapus semua data quiz untuk user ini
                     UserAnswer::where('user_id', Auth::id())
                         ->where('quiz_id', $request->quiz_id)
@@ -64,7 +90,7 @@ class UserAnswerController extends Controller
                     
                     return response()->json([
                         'success' => false,
-                        'message' => 'Anda telah mencapai batas maksimal 5 kali percobaan',
+                        'message' => 'Submit gagal! Anda telah mencapai batas maksimal 5 kali percobaan',
                         'limitReached' => true
                     ]);
                 }
@@ -172,15 +198,6 @@ class UserAnswerController extends Controller
         // Hitung persentase skor
         $score = ($totalQuestions > 0) ? ($correctAnswers / $totalQuestions) * 100 : 0;
         $roundedScore = round($score);
-
-        // Log hasil akhir
-        \Log::info('Quiz result calculation', [
-            'quiz_id' => $userAnswer->quiz_id,
-            'user_id' => $userAnswer->user_id,
-            'total_questions' => $totalQuestions,
-            'correct_answers' => $correctAnswers,
-            'final_score' => $roundedScore
-        ]);
 
         return view('quiz.result', [
             'userAnswer' => $userAnswer,
