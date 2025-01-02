@@ -83,7 +83,6 @@ Route::prefix('quiz')->group(function () {
     Route::post('/submit', [UserAnswerController::class, 'submit'])->name('quiz.submit');
 });
 
-<<<<<<< Updated upstream
 use App\Http\Controllers\ProfileController;
 
 Route::middleware('auth')->group(function () {
@@ -100,11 +99,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/edit-profile', [ProfileController::class, 'edit'])->name('profile.edit');
 });
 
-
-
-=======
 Route::get('/certificate', [App\Http\Controllers\CertificateController::class, 'index'])->name('certificate.index');
 Route::get('/certificate/preview/{quiz}', [App\Http\Controllers\CertificateController::class, 'preview'])->name('certificate.preview');
 Route::get('/certificate/generate/{quiz}', [App\Http\Controllers\CertificateController::class, 'generate'])->name('certificate.generate');
->>>>>>> Stashed changes
 
