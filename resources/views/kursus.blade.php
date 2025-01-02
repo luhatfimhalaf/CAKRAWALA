@@ -8,93 +8,47 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
-        /* Import Google Font */
         body {
-            background-color: #f8f9fa;
-            color: #19535f;
-            font-family: 'Poppins', sans-serif;
-            height: 100vh; /* Ensure full height for body */
             margin: 0;
-            display: flex; /* Flex container for sidebar and content */
-            flex-direction: column;
+            padding: 0;
+            background-color: #f4f7f6;
+            font-family: 'Poppins', sans-serif;
         }
-
-        /* Flex container for sidebar and content */
-        .main-container {
-            flex: 1;
-            display: flex;
-            height: 100%; /* Full height for main content */
+        .main-content {
+            margin-left: 260px;
+            padding: 20px;
+        }
+        .hero-section {
+            background: linear-gradient(90deg, #19535f, #133d47);
+            color: #ffffff;
+            text-align: center;
+            padding: 50px 20px;
+            border-radius: 10px;
+            position: relative;
             overflow: hidden;
         }
-
-        /* Sidebar Styling */
-        .sidebar {
-            background-color: #19535f;
-            color: #ffffff;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            width: 250px; /* Fixed width for sidebar */
-            height: 100%; /* Stretch sidebar to full height */
-            padding: 20px;
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: -20%;
+            right: -30%;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            z-index: 1;
         }
-
-        .sidebar h2 {
-            font-weight: bold;
-            text-transform: uppercase;
-            margin-bottom: 30px;
-        }
-
-        .sidebar a {
-            color: #ffffff;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            margin: 15px 0;
-            font-size: 16px;
-            transition: background-color 0.3s, color 0.3s;
-            padding: 10px;
-            border-radius: 5px;
-        }
-
-        .sidebar a i {
-            margin-right: 10px;
-        }
-
-        .sidebar a:hover {
-            background-color: #133d47;
-            color: #d1e8eb;
-        }
-
-        .sidebar a.active {
-            background-color: #0f2e38;
-            color: #d1e8eb;
-        }
-
-        /* Main Content Styling */
-        .main-content {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-        }
-
-        /* Banner Styling */
-        .daftar-kursus-banner {
-            padding: 50px 0;
-            background-color: #e9ecef;
-            text-align: center;
-        }
-
-        .daftar-kursus-banner h2 {
+        .hero-section h1 {
             font-size: 2.5rem;
-            font-weight: bold;
+            font-weight: 700;
             margin-bottom: 10px;
-            color: #19535f;
+            position: relative;
+            z-index: 2;
         }
-
-        .daftar-kursus-banner p {
-            font-size: 1rem;
-            color: #6c757d;
+        .hero-section p {
+            font-size: 1.1rem;
+            position: relative;
+            z-index: 2;
         }
 
         /* Course Card Styling */
@@ -135,40 +89,14 @@
     </style>
 </head>
 <body>
-    <div class="main-container">
-        <!-- Sidebar -->
-        <div class="sidebar">
-            <div>
-                <h2>CAKRAWALA</h2>
-                <a href="{{ route('dashboard') }}"><i class="bi bi-house"></i> Dashboard</a>
-                <a href="{{ route('kursus.index') }}" class="active"><i class="bi bi-book"></i> Courses</a>
-                <a href="{{ route('quiz.index') }}"><i class="bi bi-list-task"></i> Quiz</a>
-                <a href="{{ route('faq.index') }}"><i class="bi bi-question-circle"></i> FAQ</a>
-                <a href="#"><i class="bi bi-bell"></i> Notifications</a>
-                <a href="#"><i class="bi bi-gear"></i> Settings</a>
-            </div>
-            <div class="mt-auto">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <h5 class="card-title">Go Premium</h5>
-                        <p class="card-text">Explore 100+ expert curated courses prepared for you.</p>
-                        <button class="btn btn-primary" style="background-color:#19535f">Get Access</button>
-                    </div>
-                </div>
-            </div>
+    <!-- Sidebar -->
+    @include('partials.side-navbar-courses', ['user' => Auth::user()])
+    <div class="main-content">
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <h1>Course List</h1>
+            <p>Choose the best courses tailored to your needs.</p>
         </div>
-
-        <!-- Main Content -->
-        <div class="main-content">
-            <!-- Banner -->
-            <div class="daftar-kursus-banner">
-                <div class="container">
-                    <h2>DAFTAR KURSUS</h2>
-                    <p class="text-muted">Pilih kursus terbaik yang sesuai dengan kebutuhan Anda.</p>
-                </div>
-            </div>
-
-            <!-- Courses -->
 <div class="container mt-5">
     <div class="row g-4">
         @foreach ($courses as $course)
@@ -193,7 +121,6 @@
         @endforeach
     </div>
 </div>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

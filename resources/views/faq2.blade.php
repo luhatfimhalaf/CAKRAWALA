@@ -108,6 +108,7 @@
            <p>Find answers to frequently asked questions about our services.</p>
        </div>
        <div class="container py-5">
+        <h2 class="text-center mb-5 fw-bold">Frequently Asked Questions</h2>
         <div class="faq-container">
             <!-- Sidebar FAQ List -->
             <div class="faq-sidebar">

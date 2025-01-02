@@ -82,3 +82,41 @@ Route::prefix('quiz')->group(function () {
     Route::post('/submit', [UserAnswerController::class, 'submit'])->name('quiz.submit');
 });
 
+use App\Http\Controllers\ProfileController;
+
+Route::middleware('auth')->group(function () {
+    Route::get('/edit-profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard', ['user' => Auth::user()]);
+    })->name('dashboard');
+
+    Route::get('/edit-profile', [ProfileController::class, 'edit'])->name('profile.edit');
+});
+
+use App\Http\Controllers\PostController;
+
+// Route::middleware(['auth'])->group(function () {
+//     // Route untuk halaman utama forum
+//     Route::get('/posts', [PostController::class, 'index'])->name('posts'); // Named route
+    
+//     // Route untuk membuat postingan baru
+//     Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
+    
+//     // Route untuk menyukai postingan
+//     Route::post('/posts/{post}/like', [PostController::class, 'like'])->name('posts.like');
+    
+//     // Route untuk komentar pada postingan
+//     Route::post('/posts/{post}/comment', [PostController::class, 'comment'])->name('posts.comment');
+// });
+
+use App\Http\Controllers\TweetController;
+Route::resource('tweets', TweetController::class);
+
+
+
+
