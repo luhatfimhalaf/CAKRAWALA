@@ -144,8 +144,26 @@
     </style>
 </head>
 <body>
+<<<<<<< Updated upstream
     <!-- Sidebar -->
     @include('partials.side-navbar-courses', ['user' => Auth::user()])
+=======
+  <div class="sidebar">
+    <div>
+      <h2>CAKRAWALA</h2>
+      <a href="#"><i class="bi bi-house"></i> Dashboard</a>
+      <a href="#" class="active"><i class="bi bi-book"></i> Courses</a>
+      <a href="{{ route('quiz.index') }}"><i class="bi bi-list-task"></i> Quiz</a>
+      <a href="#"><i class="bi bi-question-circle"></i> FAQ</a>
+      <a href="#"><i class="bi bi-bell"></i> Notifications</a>
+      <a href="#"><i class="bi bi-gear"></i> Settings</a>
+      <a href="{{ route('certificate.index') }}"><i class="bi bi-file-text"></i> Certificate</a>
+    </div>
+    <div>
+      <button class="buy-now">Go Premium</button>
+    </div>
+  </div>
+>>>>>>> Stashed changes
 
     <!-- Main Content -->
     <div class="main-content">

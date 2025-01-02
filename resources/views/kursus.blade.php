@@ -89,6 +89,7 @@
     </style>
 </head>
 <body>
+<<<<<<< Updated upstream
     <!-- Sidebar -->
     @include('partials.side-navbar-courses', ['user' => Auth::user()])
     <div class="main-content">
@@ -96,6 +97,30 @@
         <div class="hero-section">
             <h1>Course List</h1>
             <p>Choose the best courses tailored to your needs.</p>
+=======
+    <div class="main-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div>
+                <h2>CAKRAWALA</h2>
+                <a href="{{ route('dashboard') }}"><i class="bi bi-house"></i> Dashboard</a>
+                <a href="{{ route('kursus.index') }}" class="active"><i class="bi bi-book"></i> Courses</a>
+                <a href="{{ route('quiz.index') }}"><i class="bi bi-list-task"></i> Quiz</a>
+                <a href="{{ route('faq.index') }}"><i class="bi bi-question-circle"></i> FAQ</a>
+                <a href="#"><i class="bi bi-bell"></i> Notifications</a>
+                <a href="#"><i class="bi bi-gear"></i> Settings</a>
+                <a href="{{ route('certificate.index') }}"><i class="bi bi-file-text"></i> Certificate</a>
+            </div>
+            <div class="mt-auto">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">Go Premium</h5>
+                        <p class="card-text">Explore 100+ expert curated courses prepared for you.</p>
+                        <button class="btn btn-primary" style="background-color:#19535f">Get Access</button>
+                    </div>
+                </div>
+            </div>
+>>>>>>> Stashed changes
         </div>
 <div class="container mt-5">
     <div class="row g-4">
