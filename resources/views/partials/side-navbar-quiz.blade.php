@@ -67,12 +67,12 @@
         <h2>CAKRAWALA</h2>
         <a href="{{ route('dashboard') }}" ><i class="bi bi-house"></i> Dashboard</a>
         <a href="{{ route('kursus.index') }}"><i class="bi bi-book"></i> Courses</a>
-        <a href="{{ route('quiz.index') }}" class="active"><i class="bi bi-list-task"></i> Quiz</a>
+        <a href="{{ route('quiz.index') }}"><i class="bi bi-list-task"></i> Quiz</a>
         <a href="#"><i class="bi bi-chat"></i>Forum</a>
         <a href="{{ route('faq.index') }}"><i class="bi bi-question-circle"></i> FAQ</a>
         <a href="#"><i class="bi bi-bell"></i> Notifications</a>
         <a href="{{route('profile.edit')}}"><i class="bi bi-gear"></i> Settings</a>
-        <a href="{{ route('certificate.index') }}"><i class="bi bi-file-text"></i> Certificate</a>
+        <a href="{{ route('certificate.index') }}" class="active"><i class="bi bi-file-text"></i> Certificate</a>
     </div>
 
     <!-- Profile Section -->
