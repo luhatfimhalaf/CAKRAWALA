@@ -11,260 +11,238 @@
     <style>
         /* Import Google Font */
         body {
-            background-color: #f8f9fa;
-            color: #19535f;
-            font-family: 'Poppins', sans-serif;
-            height: 100vh; /* Ensure full height for body */
             margin: 0;
-            display: flex; /* Flex container for sidebar and content */
-            flex-direction: column;
+            padding: 0;
+            background-color: #f4f7f6;
+            font-family: 'Poppins', sans-serif;
         }
 
-        /* Flex container for sidebar and content */
-        .main-container {
-            flex: 1;
-            display: flex;
-            height: 100%; /* Full height for main content */
+        .main-content {
+            margin-left: 260px;
+            padding: 20px;
+        }
+
+        /* Banner/Hero Section */
+        .daftar-kursus-banner {
+            background: linear-gradient(90deg, #19535f, #133d47);
+            color: #ffffff;
+            text-align: center;
+            padding: 50px 20px;
+            border-radius: 10px;
+            position: relative;
             overflow: hidden;
         }
 
-        /* Sidebar Styling */
-        .sidebar {
-            background-color: #19535f;
-            color: #ffffff;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            width: 250px; /* Fixed width for sidebar */
-            height: 100%; /* Stretch sidebar to full height */
-            padding: 20px;
-        }
-
-        .sidebar h2 {
-            font-weight: bold;
-            text-transform: uppercase;
-            margin-bottom: 30px;
-        }
-
-        .sidebar a {
-            color: #ffffff;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            margin: 15px 0;
-            font-size: 16px;
-            transition: background-color 0.3s, color 0.3s;
-            padding: 10px;
-            border-radius: 5px;
-        }
-
-        .sidebar a i {
-            margin-right: 10px;
-        }
-
-        .sidebar a:hover {
-            background-color: #133d47;
-            color: #d1e8eb;
-        }
-
-        .sidebar a.active {
-            background-color: #0f2e38;
-            color: #d1e8eb;
-        }
-
-        /* Main Content Styling */
-        .main-content {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-        }
-
-        /* Banner Styling */
-        .daftar-kursus-banner {
-            padding: 50px 0;
-            background-color: #e9ecef;
-            text-align: center;
+        .daftar-kursus-banner::before {
+            content: '';
+            position: absolute;
+            top: -20%;
+            right: -30%;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            z-index: 1;
         }
 
         .daftar-kursus-banner h2 {
             font-size: 2.5rem;
-            font-weight: bold;
+            font-weight: 700;
             margin-bottom: 10px;
-            color: #19535f;
+            position: relative;
+            z-index: 2;
         }
 
         .daftar-kursus-banner p {
-            font-size: 1rem;
-            color: #6c757d;
+            font-size: 1.1rem;
+            position: relative;
+            z-index: 2;
         }
 
-        /* Course Card Styling */
+        /* Card Styling */
         .course-card {
             border: none;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background-color: #ffffff;
         }
 
         .course-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
         }
 
         .course-card img {
             border-radius: 15px 15px 0 0;
+            height: 150px;
+            object-fit: cover;
         }
 
-        .btn-enroll {
-            background-color: #19535f;
-            color: white;
-            font-weight: bold;
-            border-radius: 5px;
-            padding: 0.5rem 1.5rem;
-            transition: background-color 0.3s ease;
-        }
-
-        .btn-enroll:hover {
-            background-color: #133e48;
-        }
-
-        .price {
-            font-size: 1.25rem;
+        .course-card h5 {
+            font-weight: 600;
             color: #19535f;
-            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .course-card p {
+            color: #555;
+        }
+
+        .btn-enroll, 
+        .btn-danger,
+        .btn-success {
+            background-color: #19535f;
+            color: #ffffff;
+            border: none;
+            border-radius: 50px;
+            padding: 10px 20px;
+        }
+
+        .btn-enroll:hover,
+        .btn-danger:hover,
+        .btn-success:hover {
+            background-color: #133d47;
+            color: #ffffff;
+        }
+
+        /* Tambahkan style khusus untuk btn-danger */
+        .btn-danger {
+            background-color: #dc3545 !important; /* Warna merah dari Bootstrap */
+        }
+
+        .btn-danger:hover {
+            background-color: #bb2d3b !important; /* Warna merah yang lebih gelap saat hover */
+        }
+
+        /* Container Spacing */
+        .container {
+            margin-top: 30px;
+        }
+
+        /* Section Headers */
+        h3 {
+            font-weight: 600;
+            color: #19535f;
+        }
+
+        /* Badge Styling */
+        .badge {
+            border-radius: 50px;
+            padding: 8px 15px;
         }
     </style>
 </head>
 <body>
-    <!-- Sidebar -->
     <div class="main-container">
-        <div class="sidebar">
-            <div>
-                <h2>CAKRAWALA</h2>
-                <a href="{{ route('dashboard') }}" ><i class="bi bi-house"></i> Dashboard</a>
-                <a href="{{ route('kursus.index') }}"><i class="bi bi-book"></i> Courses</a>
-                <a href="{{ route('quiz.index') }}" class="active"><i class="bi bi-list-task"></i> Quiz</a>
-                <a href="{{ route('faq.index') }}"><i class="bi bi-question-circle"></i> FAQ</a>
-                <a href="#"><i class="bi bi-bell"></i> Notifications</a>
-                <a href="#"><i class="bi bi-gear"></i> Settings</a>
-                <a href="{{ route('certificate.index') }}"><i class="bi bi-file-text"></i> Certificate</a>
-            </div>
-            <div class="mt-auto">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <h5 class="card-title">Go Premium</h5>
-                        <p class="card-text">Explore 100+ expert curated courses prepared for you.</p>
-                        <button class="btn btn-primary">Get Access</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+        <!-- Sidebar -->
+        @include('partials.side-navbar-quiz', ['user' => Auth::user()])
+        
         <!-- Main Content -->
         <div class="main-content">
             <!-- Banner -->
             <div class="daftar-kursus-banner">
-                <div class="container">
-                    <h2>Daftar Kuis</h2>
-                    <p class="text-muted">Pilih kursus terbaik yang sesuai dengan kebutuhan Anda.</p>
-                </div>
+                <h2>Daftar Kuis</h2>
+                <p class="text-white">Pilih kursus terbaik yang sesuai dengan kebutuhan Anda.</p>
             </div>
-
-<!-- Quizzes -->
-<div class="container mt-5">
-    <!-- Incomplete Quizzes -->
-    <div class="mb-5">
-        <h3 class="mb-4">Kuis Yang Belum Dikerjakan</h3>
-        <div class="row g-4">
-            @foreach ($quiz as $quiz_item)
-                @if($quiz_item->userAnswers->count() == 0)
-                    <div class="col-md-4">
-                        <div class="card course-card">
-                            <img src="{{ asset($quiz_item->course->image) }}" class="card-img-top" alt="{{ $quiz_item->course->title }}">
-                            <div class="card-body">
-                                <span class="badge bg-primary mb-3">{{ ucfirst($quiz_item->course->category) }}</span>
-                                <h5 class="card-title">{{ $quiz_item->course->title }}</h5>
-                                <div class="course-info my-3">
-                                    <p>{{ $quiz_item->description }}</p>
-                                    <span>Durasi: {{ $quiz_item->duration ?? '10' }} Menit</span> | 
-                                    <span>Soal: {{ $quiz_item->total_questions ?? '5' }} Soal</span>
-                                </div>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <a href="{{ route('quiz.show', $quiz_item->id) }}" class="btn btn-enroll">Mulai Sekarang</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endif
-            @endforeach
-        </div>
-    </div>
-
-    <!-- Failed Quizzes (Score < 80) -->
-    <div class="mb-5">
-        <h3 class="mb-4">Kuis Yang Perlu Diulang</h3>
-        <div class="row g-4">
-            @foreach ($quiz as $quiz_item)
-                @php
-                    $latestAnswer = $quiz_item->userAnswers()->orderBy('created_at', 'desc')->first();
-                @endphp
-                @if($quiz_item->userAnswers->count() > 0 && $latestAnswer && $latestAnswer->score < 80)
-                    <div class="col-md-4">
-                        <div class="card course-card">
-                            <img src="{{ asset($quiz_item->course->image) }}" class="card-img-top" alt="{{ $quiz_item->course->title }}">
-                            <div class="card-body">
-                                <span class="badge bg-primary mb-3">{{ ucfirst($quiz_item->course->category) }}</span>
-                                <h5 class="card-title">{{ $quiz_item->course->title }}</h5>
-                                <div class="course-info my-3">
-                                    <p>{{ $quiz_item->description }}</p>
-                                    <span>Durasi: {{ $quiz_item->duration ?? '10' }} Menit</span> | 
-                                    <span>Soal: {{ $quiz_item->total_questions ?? '5' }} Soal</span>
-                                    <div class="mt-2">
-                                        <span class="text-danger">Nilai Terakhir: {{ $latestAnswer->score }}</span>
+            
+            <!-- Quizzes content -->
+            <div class="container mt-5">
+                <!-- Incomplete Quizzes -->
+                <div class="mb-5">
+                    <h3 class="mb-4">Kuis Yang Belum Dikerjakan</h3>
+                    <div class="row g-4">
+                        @foreach ($quiz as $quiz_item)
+                            @if($quiz_item->userAnswers->count() == 0)
+                                <div class="col-md-4">
+                                    <div class="card course-card">
+                                        <img src="{{ asset($quiz_item->course->image) }}" class="card-img-top" alt="{{ $quiz_item->course->title }}">
+                                        <div class="card-body">
+                                            <span class="badge bg-primary mb-3">{{ ucfirst($quiz_item->course->category) }}</span>
+                                            <h5 class="card-title">{{ $quiz_item->course->title }}</h5>
+                                            <div class="course-info my-3">
+                                                <p>{{ $quiz_item->description }}</p>
+                                                <span>Durasi: {{ $quiz_item->duration ?? '10' }} Menit</span> | 
+                                                <span>Soal: {{ $quiz_item->total_questions ?? '5' }} Soal</span>
+                                            </div>
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <a href="{{ route('quiz.show', $quiz_item->id) }}" class="btn btn-enroll">Mulai Sekarang</a>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <a href="{{ route('quiz.show', $quiz_item->id) }}" class="btn btn-danger">Kerjakan Ulang</a>
-                                </div>
-                            </div>
-                        </div>
+                            @endif
+                        @endforeach
                     </div>
-                @endif
-            @endforeach
-        </div>
-    </div>
+                </div>
 
-    <!-- Completed Quizzes (Only show if score >= 80) -->
-    <div>
-        <h3 class="mb-4">Kuis Yang Sudah Dikerjakan</h3>
-        <div class="row g-4">
-            @foreach ($quiz as $quiz_item)
-                @php
-                    $latestAnswer = $quiz_item->userAnswers()->orderBy('created_at', 'desc')->first();
-                @endphp
-                @if($quiz_item->userAnswers->count() > 0 && $latestAnswer && $latestAnswer->score >= 80)
-                    <div class="col-md-4">
-                        <div class="card course-card">
-                            <img src="{{ asset($quiz_item->course->image) }}" class="card-img-top" alt="{{ $quiz_item->course->title }}">
-                            <div class="card-body">
-                                <span class="badge bg-primary mb-3">{{ ucfirst($quiz_item->course->category) }}</span>
-                                <h5 class="card-title">{{ $quiz_item->course->title }}</h5>
-                                <div class="course-info my-3">
-                                    <p>{{ $quiz_item->description }}</p>
-                                    <span>Durasi: {{ $quiz_item->duration ?? '10' }} Menit</span> | 
-                                    <span>Soal: {{ $quiz_item->total_questions ?? '5' }} Soal</span>
+                <!-- Failed Quizzes (Score < 80) -->
+                <div class="mb-5">
+                    <h3 class="mb-4">Kuis Yang Perlu Diulang</h3>
+                    <div class="row g-4">
+                        @foreach ($quiz as $quiz_item)
+                            @php
+                                $latestAnswer = $quiz_item->userAnswers()->orderBy('created_at', 'desc')->first();
+                            @endphp
+                            @if($quiz_item->userAnswers->count() > 0 && $latestAnswer && $latestAnswer->score < 80)
+                                <div class="col-md-4">
+                                    <div class="card course-card">
+                                        <img src="{{ asset($quiz_item->course->image) }}" class="card-img-top" alt="{{ $quiz_item->course->title }}">
+                                        <div class="card-body">
+                                            <span class="badge bg-primary mb-3">{{ ucfirst($quiz_item->course->category) }}</span>
+                                            <h5 class="card-title">{{ $quiz_item->course->title }}</h5>
+                                            <div class="course-info my-3">
+                                                <p>{{ $quiz_item->description }}</p>
+                                                <span>Durasi: {{ $quiz_item->duration ?? '10' }} Menit</span> | 
+                                                <span>Soal: {{ $quiz_item->total_questions ?? '5' }} Soal</span>
+                                                <div class="mt-2">
+                                                    <span class="text-danger">Nilai Terakhir: {{ $latestAnswer->score }}</span>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <a href="{{ route('quiz.show', $quiz_item->id) }}" class="btn btn-danger">Kerjakan Ulang</a>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <a href="{{ route('quiz.result', $quiz_item->id) }}" class="btn btn-success">Lihat Hasil</a>
-                                </div>
-                            </div>
-                        </div>
+                            @endif
+                        @endforeach
                     </div>
-                @endif
-            @endforeach
+                </div>
+
+                <!-- Completed Quizzes (Only show if score >= 80) -->
+                <div>
+                    <h3 class="mb-4">Kuis Yang Sudah Dikerjakan</h3>
+                    <div class="row g-4">
+                        @foreach ($quiz as $quiz_item)
+                            @php
+                                $latestAnswer = $quiz_item->userAnswers()->orderBy('created_at', 'desc')->first();
+                            @endphp
+                            @if($quiz_item->userAnswers->count() > 0 && $latestAnswer && $latestAnswer->score >= 80)
+                                <div class="col-md-4">
+                                    <div class="card course-card">
+                                        <img src="{{ asset($quiz_item->course->image) }}" class="card-img-top" alt="{{ $quiz_item->course->title }}">
+                                        <div class="card-body">
+                                            <span class="badge bg-primary mb-3">{{ ucfirst($quiz_item->course->category) }}</span>
+                                            <h5 class="card-title">{{ $quiz_item->course->title }}</h5>
+                                            <div class="course-info my-3">
+                                                <p>{{ $quiz_item->description }}</p>
+                                                <span>Durasi: {{ $quiz_item->duration ?? '10' }} Menit</span> | 
+                                                <span>Soal: {{ $quiz_item->total_questions ?? '5' }} Soal</span>
+                                            </div>
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <a href="{{ route('quiz.result', $quiz_item->id) }}" class="btn btn-success">Lihat Hasil</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+                        @endforeach
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

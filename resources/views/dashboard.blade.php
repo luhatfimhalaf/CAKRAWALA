@@ -121,7 +121,6 @@
     </style>
 </head>
 <body>
-<<<<<<< Updated upstream
     <!-- Sidebar -->
     @include('partials.side-navbar-dashboard', ['user' => Auth::user()])
     <!-- Main Content -->
@@ -137,23 +136,6 @@
             <div class="col-md-4">
                 <div class="card">
                     <img src="images/Prepare Your Career.png" alt="Prepare Your Career">
-=======
-    <div class="main-container">
-        <!-- Sidebar -->
-        <div class="sidebar">
-            <div>
-                <h2>CAKRAWALA</h2>
-                <a href="{{ route('dashboard') }}" class="active"><i class="bi bi-house"></i> Dashboard</a>
-                <a href="{{ route('kursus.index') }}"><i class="bi bi-book"></i> Courses</a>
-                <a href="{{ route('quiz.index') }}"><i class="bi bi-list-task"></i> Quiz</a>
-                <a href="{{ route('faq.index') }}"><i class="bi bi-question-circle"></i> FAQ</a>
-                <a href="#"><i class="bi bi-bell"></i> Notifications</a>
-                <a href="#"><i class="bi bi-gear"></i> Settings</a>
-                <a href="{{ route('certificate.index') }}"><i class="bi bi-file-text"></i> Certificate</a>
-            </div>
-            <div class="mt-auto">
-                <div class="card text-center">
->>>>>>> Stashed changes
                     <div class="card-body">
                         <h5>Prepare Your Career</h5>
                         <p>Join our courses to build a brighter future with inclusive career preparation programs.</p>
