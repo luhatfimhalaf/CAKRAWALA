@@ -181,7 +181,15 @@
         <!-- Price Box -->
         <div class="price-box text-center">
             <p class="price">
+<<<<<<< HEAD
             Rp{{ number_format($course->price, 0, ',', '.') }}<span class="original-price">Rp700.000</span>
+=======
+<<<<<<< HEAD
+            Rp{{ number_format($course->price, 0, ',', '.') }}<span class="original-price">Rp700.000</span>
+=======
+                $60 <span class="original-price">$120</span>
+>>>>>>> d85fb05f6cdeae5a596140ed0138c05b117d6775
+>>>>>>> 837017c7f2a8ea4a152f4910bbb861934e383975
             </p>
             <a href="{{ route('payment', $course['id']) }}" 
                class="buy-now btn btn-primary w-100 py-2" 

@@ -42,6 +42,83 @@ class UserAnswerController extends Controller
                     $correctAnswers++;
                 }
             }
+<<<<<<< HEAD
+
+            // Hitung persentase score
+            $score = ($totalQuestions > 0) ? ($correctAnswers / $totalQuestions) * 100 : 0;
+            $roundedScore = round($score);
+
+            // Cek apakah sudah ada jawaban untuk quiz ini
+            $existingAnswer = UserAnswer::where('user_id', Auth::id())
+                ->where('quiz_id', $request->quiz_id)
+                ->first();
+
+            if ($existingAnswer) {
+                $newAttempt = $existingAnswer->attempt + 1;
+                
+                // Cek jika attempt sudah mencapai 5
+                if ($newAttempt >= 5) {
+                    // Hapus semua data quiz untuk user ini
+                    UserAnswer::where('user_id', Auth::id())
+                        ->where('quiz_id', $request->quiz_id)
+                        ->delete();
+                    
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Anda telah mencapai batas maksimal 5 kali percobaan',
+                        'limitReached' => true
+                    ]);
+                }
+                
+                $existingAnswer->update([
+                    'question_1' => $request->question_1,
+                    'question_2' => $request->question_2,
+                    'question_3' => $request->question_3,
+                    'question_4' => $request->question_4,
+                    'question_5' => $request->question_5,
+                    'finish_time' => $request->finish_time,
+                    'attempt' => $newAttempt,
+                    'score' => $roundedScore
+                ]);
+
+                \Log::info('Answer updated with score:', [
+                    'quiz_id' => $request->quiz_id,
+                    'attempt' => $newAttempt,
+                    'score' => $roundedScore
+                ]);
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Jawaban berhasil diperbarui',
+                    'quiz_id' => $request->quiz_id,
+                    'attempt' => $newAttempt,
+                    'score' => $roundedScore,
+                    'redirect_url' => route('quiz.result', ['id' => $request->quiz_id])
+                ]);
+            }
+
+            // Jika tidak ada data sebelumnya, buat baru
+            UserAnswer::create([
+                'user_id' => Auth::id(),
+                'quiz_id' => $request->quiz_id,
+                'question_1' => $request->question_1,
+                'question_2' => $request->question_2,
+                'question_3' => $request->question_3,
+                'question_4' => $request->question_4,
+                'question_5' => $request->question_5,
+                'finish_time' => $request->finish_time,
+                'attempt' => 1,
+                'score' => $roundedScore
+            ]);
+
+            // Tambahkan logging sebelum return
+            \Log::info('About to return response:', [
+                'success' => true,
+                'message' => 'Jawaban berhasil disimpan',
+                'redirect_url' => route('quiz.result', ['id' => $request->quiz_id])
+            ]);
+=======
+>>>>>>> 837017c7f2a8ea4a152f4910bbb861934e383975
 
             // Hitung persentase score
             $score = ($totalQuestions > 0) ? ($correctAnswers / $totalQuestions) * 100 : 0;
@@ -117,6 +194,7 @@ class UserAnswerController extends Controller
                 'redirect_url' => route('quiz.result', ['id' => $request->quiz_id])
             ]);
 
+<<<<<<< Updated upstream
             return response()->json([
                 'success' => true,
                 'message' => 'Jawaban berhasil disimpan',
@@ -139,12 +217,47 @@ class UserAnswerController extends Controller
                 'message' => 'Gagal menyimpan jawaban: ' . $e->getMessage()
             ], 500);
         }
+=======
+        return response()->json([
+            'success' => true,
+            'message' => $message,
+            'quiz_id' => $request->quiz_id,
+            'score' => $score,
+            'attempt' => $existingAnswer ? $newAttempt : 1,
+            'redirect_url' => route('quiz.result', ['quiz_id' => $request->quiz_id])
+        ]);
+>>>>>>> Stashed changes
     }
 
     public function result($id)
     {
+<<<<<<< HEAD
         // Ambil user answer beserta relasinya
         $userAnswer = UserAnswer::with(['quiz.course', 'quiz.questions'])->findOrFail($id);
+=======
+        // Ambil user answer beserta relasinya dan pastikan hanya milik user yang sedang login
+        $userAnswer = UserAnswer::with(['quiz.course', 'quiz.questions'])
+            ->where('quiz_id', $id)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
+
+        \Log::info('User Answer Data:', [
+            'user_answer_id' => $userAnswer->id,
+            'user_id' => $userAnswer->user_id,
+            'quiz_id' => $userAnswer->quiz_id,
+            'answers' => [
+                'question_1' => $userAnswer->question_1,
+                'question_2' => $userAnswer->question_2, 
+                'question_3' => $userAnswer->question_3,
+                'question_4' => $userAnswer->question_4,
+                'question_5' => $userAnswer->question_5
+            ],
+            'score' => $userAnswer->score,
+            'attempt' => $userAnswer->attempt,
+            'finish_time' => $userAnswer->finish_time
+        ]);
+
+>>>>>>> 837017c7f2a8ea4a152f4910bbb861934e383975
         
         // Hitung skor dengan membandingkan jawaban user dengan jawaban benar
         $correctAnswers = 0;
