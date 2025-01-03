@@ -41,6 +41,22 @@ Route::get('/dashboard', function () {
 
 Route::post('courses/buy',[CoursesController::class,'buy']);
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+// use App\Http\Controllers\CourseController;
+// Route::get('/', [CourseController::class, 'index'])->name('courses.index');
+// Route::get('/courses/{id}', [CourseController::class, 'show'])->name('courses.show');
+
+use App\Http\Controllers\TransactionController; 
+Route::post('/transactions/{course_id}', [TransactionController::class, 'create'])->name('transactions.create');
+Route::get('/transactions/{id}', [TransactionController::class, 'show'])->name('transactions.show');
+Route::get('/transactions/{id}/pay', [TransactionController::class, 'simulatePayment'])->name('transactions.pay');
+Route::post('/transactions', [TransactionController::class, 'store'])->name('transactions.store');
+
+>>>>>>> 837017c7f2a8ea4a152f4910bbb861934e383975
+>>>>>>> 8f5fd836cd356f5db71fd9418e40364e773adcdf
 use App\Http\Controllers\CourseController;
 Route::get('/kursus', [CourseController::class, 'indexKursus'])->name('kursus');
 Route::get('/kursus/{id}', [CourseController::class, 'show'])->name('kursus.detail');
@@ -75,12 +91,21 @@ use App\Http\Controllers\QuestionController;
 Route::prefix('quiz')->group(function () {
     Route::get('/', [QuizController::class, 'index'])->name('quiz.index');
     Route::get('/{id}', [QuizController::class, 'show'])->name('quiz.show');
+<<<<<<< HEAD
     Route::get('/{id}/result', [UserAnswerController::class, 'result'])->name('quiz.result');
+=======
+<<<<<<< HEAD
+    Route::get('/{id}/result', [UserAnswerController::class, 'result'])->name('quiz.result');
+=======
+    Route::get('/{quiz_id}/result', [UserAnswerController::class, 'result'])->name('quiz.result');
+>>>>>>> 837017c7f2a8ea4a152f4910bbb861934e383975
+>>>>>>> 8f5fd836cd356f5db71fd9418e40364e773adcdf
     Route::post('/submit', [UserAnswerController::class, 'submit'])->name('quiz.submit');
 });
 
 use App\Http\Controllers\ProfileController;
 
+<<<<<<< HEAD
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -88,13 +113,35 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
+=======
+Route::middleware('auth')->group(function () {
+    Route::get('/edit-profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+});
+
+>>>>>>> 8f5fd836cd356f5db71fd9418e40364e773adcdf
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard', ['user' => Auth::user()]);
     })->name('dashboard');
+<<<<<<< HEAD
     Route::get('/edit-profile', [ProfileController::class, 'edit'])->name('profile.edit');
 });
 
+=======
+<<<<<<< HEAD
+    Route::get('/edit-profile', [ProfileController::class, 'edit'])->name('profile.edit');
+});
+
+=======
+
+    Route::get('/edit-profile', [ProfileController::class, 'edit'])->name('profile.edit');
+});
+
+<<<<<<< HEAD
+>>>>>>> 837017c7f2a8ea4a152f4910bbb861934e383975
+>>>>>>> 8f5fd836cd356f5db71fd9418e40364e773adcdf
 use App\Http\Controllers\PostController;
 
 // Route::middleware(['auth'])->group(function () {
@@ -114,8 +161,20 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\TweetController;
 Route::resource('tweets', TweetController::class);
 
+<<<<<<< HEAD
 use App\Http\Controllers\DashboardController;
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+=======
+<<<<<<< HEAD
+use App\Http\Controllers\DashboardController;
+
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+=======
+=======
+>>>>>>> d85fb05f6cdeae5a596140ed0138c05b117d6775
+
+>>>>>>> 837017c7f2a8ea4a152f4910bbb861934e383975
+>>>>>>> 8f5fd836cd356f5db71fd9418e40364e773adcdf
 
 

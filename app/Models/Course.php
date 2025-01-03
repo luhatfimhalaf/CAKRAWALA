@@ -24,9 +24,18 @@ class Course extends Model
     public function quiz(): HasMany
     {
         return $this->hasMany(Quiz::class, 'course_id', 'id');
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 8f5fd836cd356f5db71fd9418e40364e773adcdf
     }
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'user_courses', 'course_id', 'user_id');
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 837017c7f2a8ea4a152f4910bbb861934e383975
+>>>>>>> 8f5fd836cd356f5db71fd9418e40364e773adcdf
     }
 }

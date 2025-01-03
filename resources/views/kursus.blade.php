@@ -94,6 +94,10 @@
     <div class="main-content">
         <!-- Hero Section -->
         <div class="hero-section">
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 8f5fd836cd356f5db71fd9418e40364e773adcdf
             <h1>Course</h1>
             <p>Choose the best courses tailored to your needs.</p>
         </div>
@@ -121,7 +125,40 @@
                 @endforeach
             </div>
         </div>
+<<<<<<< HEAD
     </div>
+=======
+    </div>
+=======
+            <h1>Course List</h1>
+            <p>Choose the best courses tailored to your needs.</p>
+        </div>
+<div class="container mt-5">
+    <div class="row g-4">
+        @foreach ($courses as $course)
+            <div class="col-md-4">
+                <div class="card course-card">
+                    <img src="{{ asset($course->image) }}" class="card-img-top" alt="{{ $course->title }}">
+                    <div class="card-body">
+                        <span class="badge bg-primary mb-3">{{ ucfirst($course->category) }}</span>
+                        <h5 class="card-title">{{ $course->title }}</h5>
+                        <div class="course-info my-3">
+                            <span>Lessons: {{ $course->lessons }}</span> | 
+                            <span>Duration: {{ $course->duration }}</span> | 
+                            <span>Students: {{ $course->students }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <p class="price mb-0"><strong>Rp{{ number_format($course->price, 0, ',', '.') }}</strong></p>
+                            <a href="{{ route('kursus.detail', $course->id) }}" class="btn btn-enroll">Enroll</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endforeach
+    </div>
+</div>
+>>>>>>> 837017c7f2a8ea4a152f4910bbb861934e383975
+>>>>>>> 8f5fd836cd356f5db71fd9418e40364e773adcdf
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

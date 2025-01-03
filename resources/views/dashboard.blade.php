@@ -139,7 +139,15 @@
                     <div class="card-body">
                         <h5>Prepare Your Career</h5>
                         <p>Join our courses to build a brighter future with inclusive career preparation programs.</p>
+<<<<<<< HEAD
                         <a href="{{ route('courses.index') }}" class="btn btn-primary">Learn More</a>
+=======
+<<<<<<< HEAD
+                        <a href="{{ route('courses.index') }}" class="btn btn-primary">Learn More</a>
+=======
+                        <a href="#" class="btn">Learn More</a>
+>>>>>>> 837017c7f2a8ea4a152f4910bbb861934e383975
+>>>>>>> 8f5fd836cd356f5db71fd9418e40364e773adcdf
                     </div>
                 </div>
             </div>

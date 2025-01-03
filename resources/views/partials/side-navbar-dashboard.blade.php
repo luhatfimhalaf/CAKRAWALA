@@ -66,13 +66,32 @@
     <div>
         <h2>CAKRAWALA</h2>
         <a href="{{ route('dashboard') }}" class="active"><i class="bi bi-house"></i> Dashboard</a>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 8f5fd836cd356f5db71fd9418e40364e773adcdf
         <a href="{{ route('kursus') }}"><i class="bi bi-book"></i> Courses</a>
         <a href="{{ route('reminders.index') }}"><i class="bi bi-app-indicator"></i>Reminder</a>
         <a href="{{ route('quiz.index') }}"><i class="bi bi-list-task"></i> Quiz</a>
         <a href="{{ route('tweets.index') }}" class="{{ request()->routeIs('tweets.index') ? 'active' : '' }}"><i class="bi bi-chat"></i> Tweet</a>
+<<<<<<< HEAD
         <a href="{{ route('faq.index') }}"><i class="bi bi-question-circle"></i> FAQ</a>
         <a href="#"><i class="bi bi-bell"></i> Notifications</a>
         <a href="{{route('profile')}}"><i class="bi bi-gear"></i> Settings</a>
+=======
+=======
+        <a href="{{ route('kursus.index') }}"><i class="bi bi-book"></i> Courses</a>
+        <a href="{{ route('quiz.index') }}"><i class="bi bi-list-task"></i> Quiz</a>
+<<<<<<< HEAD
+        <a href="{{ route('tweets.index') }}" class="{{ request()->routeIs('tweets.index') ? 'active' : '' }}"><i class="bi bi-chat"></i> Tweet</a>
+=======
+        <a href="#"><i class="bi bi-chat"></i>Forum</a>
+>>>>>>> d85fb05f6cdeae5a596140ed0138c05b117d6775
+>>>>>>> 837017c7f2a8ea4a152f4910bbb861934e383975
+        <a href="{{ route('faq.index') }}"><i class="bi bi-question-circle"></i> FAQ</a>
+        <a href="#"><i class="bi bi-bell"></i> Notifications</a>
+        <a href="{{route('profile.edit')}}"><i class="bi bi-gear"></i> Settings</a>
+>>>>>>> 8f5fd836cd356f5db71fd9418e40364e773adcdf
     </div>
 
     <!-- Profile Section -->
