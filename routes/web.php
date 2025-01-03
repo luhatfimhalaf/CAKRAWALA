@@ -98,7 +98,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/edit-profile', [ProfileController::class, 'edit'])->name('profile.edit');
 });
 
-
-
+Route::get('/certificate', [App\Http\Controllers\CertificateController::class, 'index'])->name('certificate.index');
+Route::get('/certificate/preview/{quiz}', [App\Http\Controllers\CertificateController::class, 'preview'])->name('certificate.preview');
+Route::get('/certificate/generate/{quiz}', [App\Http\Controllers\CertificateController::class, 'generate'])->name('certificate.generate');
 
 Route::delete('/quiz/reset-attempts/{quiz_id}', [UserAnswerController::class, 'resetAttempts'])->name('quiz.reset-attempts');
