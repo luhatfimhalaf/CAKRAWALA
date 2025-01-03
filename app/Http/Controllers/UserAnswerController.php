@@ -117,6 +117,7 @@ class UserAnswerController extends Controller
                 'redirect_url' => route('quiz.result', ['id' => $request->quiz_id])
             ]);
 
+<<<<<<< Updated upstream
             return response()->json([
                 'success' => true,
                 'message' => 'Jawaban berhasil disimpan',
@@ -139,12 +140,42 @@ class UserAnswerController extends Controller
                 'message' => 'Gagal menyimpan jawaban: ' . $e->getMessage()
             ], 500);
         }
+=======
+        return response()->json([
+            'success' => true,
+            'message' => $message,
+            'quiz_id' => $request->quiz_id,
+            'score' => $score,
+            'attempt' => $existingAnswer ? $newAttempt : 1,
+            'redirect_url' => route('quiz.result', ['quiz_id' => $request->quiz_id])
+        ]);
+>>>>>>> Stashed changes
     }
 
     public function result($id)
     {
-        // Ambil user answer beserta relasinya
-        $userAnswer = UserAnswer::with(['quiz.course', 'quiz.questions'])->findOrFail($id);
+        // Ambil user answer beserta relasinya dan pastikan hanya milik user yang sedang login
+        $userAnswer = UserAnswer::with(['quiz.course', 'quiz.questions'])
+            ->where('quiz_id', $id)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
+
+        \Log::info('User Answer Data:', [
+            'user_answer_id' => $userAnswer->id,
+            'user_id' => $userAnswer->user_id,
+            'quiz_id' => $userAnswer->quiz_id,
+            'answers' => [
+                'question_1' => $userAnswer->question_1,
+                'question_2' => $userAnswer->question_2, 
+                'question_3' => $userAnswer->question_3,
+                'question_4' => $userAnswer->question_4,
+                'question_5' => $userAnswer->question_5
+            ],
+            'score' => $userAnswer->score,
+            'attempt' => $userAnswer->attempt,
+            'finish_time' => $userAnswer->finish_time
+        ]);
+
         
         // Hitung skor dengan membandingkan jawaban user dengan jawaban benar
         $correctAnswers = 0;

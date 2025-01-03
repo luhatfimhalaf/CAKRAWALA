@@ -78,7 +78,7 @@ use App\Http\Controllers\QuestionController;
 Route::prefix('quiz')->group(function () {
     Route::get('/', [QuizController::class, 'index'])->name('quiz.index');
     Route::get('/{id}', [QuizController::class, 'show'])->name('quiz.show');
-    Route::get('/{id}/result', [UserAnswerController::class, 'result'])->name('quiz.result');
+    Route::get('/{quiz_id}/result', [UserAnswerController::class, 'result'])->name('quiz.result');
     Route::post('/submit', [UserAnswerController::class, 'submit'])->name('quiz.submit');
 });
 
@@ -98,6 +98,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/edit-profile', [ProfileController::class, 'edit'])->name('profile.edit');
 });
 
+<<<<<<< HEAD
 use App\Http\Controllers\PostController;
 
 // Route::middleware(['auth'])->group(function () {
@@ -117,6 +118,8 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\TweetController;
 Route::resource('tweets', TweetController::class);
 
+=======
+>>>>>>> d85fb05f6cdeae5a596140ed0138c05b117d6775
 
 
 
