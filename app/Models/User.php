@@ -2,19 +2,26 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, HasFactory;
 
     protected $fillable = [
         'name',
         'phone',
         'email',
         'password',
+        'profile_picture',
+        'address',
+        'work_experience',
+        'last_education',
+        'expertise',
     ];
 
     protected $hidden = [
@@ -22,8 +29,8 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    public function userAnswers(): HasMany
+    public function courses(): BelongsToMany
     {
-        return $this->hasMany(UserAnswer::class, 'user_id', 'id');
+        return $this->belongsToMany(Course::class, 'user_courses', 'user_id', 'course_id');
     }
-} 
+}

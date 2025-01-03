@@ -7,6 +7,8 @@ use Midtrans\Config;
 use Midtrans\Snap;
 use App\Models\Transaction;
 use App\Models\Course;
+use App\Models\User;
+use App\Models\UserCourse; // Model yang menghubungkan user dan course
 
 class PaymentController extends Controller
 {
@@ -25,8 +27,7 @@ class PaymentController extends Controller
             'email' => 'required|email',
             'amount' => 'required|numeric',
         ]);
-        \Log::info('Request Data:', $request->all());
-
+        
         // Konfigurasi Midtrans
         Config::$serverKey = env('MIDTRANS_SERVER_KEY');
         Config::$isProduction = env('MIDTRANS_IS_PRODUCTION');
@@ -50,15 +51,13 @@ class PaymentController extends Controller
             'transaction_details' => $transactionDetails,
             'customer_details' => $customerDetails,
         ];
-        // Logging untuk memeriksa data $params
-        \Log::info('Midtrans Params:', $params);
 
         try {
             // Dapatkan token Snap
             $snapToken = Snap::getSnapToken($params);
 
             // Simpan transaksi ke database
-            Transaction::create([
+            $transaction = Transaction::create([
                 'course_id' => $request->course_id,
                 'order_id' => $orderId,
                 'name' => $request->name,
@@ -73,5 +72,68 @@ class PaymentController extends Controller
             \Log::error('Midtrans Error: ' . $e->getMessage());
             return response()->json(['error' => $e->getMessage()]);
         }
+    }
+
+    // Callback function dari Midtrans
+    public function handleMidtransCallback(Request $request)
+    {
+        // Log the request to verify incoming data
+        \Log::info('Midtrans Callback Request:', $request->all());
+
+        $serverKey = env('MIDTRANS_SERVER_KEY');
+        $hashed = hash("sha512", $request->order_id . $request->status_code . $request->gross_amount . $serverKey);
+        
+        if ($hashed !== $request->signature_key) {
+            \Log::error('Invalid Signature: ', ['hashed' => $hashed, 'signature_key' => $request->signature_key]);
+            return response()->json(['message' => 'Invalid signature'], 403);
+        }
+
+        // Cari transaksi berdasarkan order_id
+        $transaction = Transaction::where('order_id', $request->order_id)->first();
+
+        if ($transaction) {
+            \Log::info('Transaction Found:', ['transaction' => $transaction]);
+
+            // Tentukan status berdasarkan transaction_status dari Midtrans
+            if ($request->transaction_status == 'settlement') {
+                $transaction->status = 'success';
+                \Log::info('Transaction Status: success');
+            } elseif ($request->transaction_status == 'pending') {
+                $transaction->status = 'pending';
+                \Log::info('Transaction Status: pending');
+            } elseif (in_array($request->transaction_status, ['deny', 'expire', 'cancel'])) {
+                $transaction->status = 'failed';
+                \Log::info('Transaction Status: failed');
+            }
+
+            $transaction->save();
+
+            // Tambahkan kursus ke user jika transaksi sukses
+            if ($request->transaction_status == 'settlement') {
+                $user = User::where('email', $transaction->email)->first();
+                if ($user) {
+                    // Pastikan kursus ditambahkan ke user jika belum ada
+                    UserCourse::firstOrCreate([
+                        'user_id' => $user->id,
+                        'course_id' => $transaction->course_id,
+                    ]);
+                }
+            }
+        } else {
+            \Log::error('Transaction Not Found for Order ID:', ['order_id' => $request->order_id]);
+        }
+
+        return response()->json(['message' => 'Transaction updated']);
+    }
+
+    public function myCourses()
+    {
+        // Ambil kursus yang dibeli oleh pengguna yang sedang login
+        $user = auth()->user();
+        
+        // Periksa apakah relasi sudah ada di model User untuk courses()
+        $courses = $user->courses()->get(); // Relasi antara User dan Course
+    
+        return view('my-courses', compact('courses'));
     }
 }
