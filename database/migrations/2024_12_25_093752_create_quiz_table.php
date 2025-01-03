@@ -13,14 +13,10 @@ return new class extends Migration
     {
         Schema::create('quiz', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('course_id')->constrained()->onDelete('cascade');
-            $table->integer('question_no')->nullable(false);
-            $table->string('question', 255);
-            $table->string('answer_a', 255)->nullable();
-            $table->string('answer_b', 255)->nullable();
-            $table->string('answer_c', 255)->nullable();
-            $table->string('answer_d', 255)->nullable();
-            $table->string('right_answer', 20)->nullable(false); // Menyimpan nama kolom jawaban
+            $table->string('title', 255);
+            $table->string('description', 255);
+            $table->unsignedBigInteger('course_id');
+            $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');
             $table->timestamps();
         });
     }
