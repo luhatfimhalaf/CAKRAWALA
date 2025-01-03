@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body {
             margin: 0;
@@ -578,19 +579,33 @@
         const selectedAnswer = document.querySelector('input[name="answer"]:checked');
         if (selectedAnswer) {
             const currentNumber = getCurrentQuestionNumber();
-            userAnswers[currentNumber] = selectedAnswer.value;
-            // Tandai tombol nomor sebagai sudah dijawab
-            document.getElementById(`tab-no${currentNumber}`).classList.add('answered');
+            // Get the actual answer text from the label
+            const answerLabel = document.querySelector(`label[for="${selectedAnswer.id}"]`);
+            const answerText = answerLabel.textContent.trim();
+            userAnswers[currentNumber] = answerText;
+            
+            console.log('Saved answer:', {
+                questionNumber: currentNumber,
+                answer: answerText,
+                allAnswers: userAnswers
+            });
         }
     }
 
     function loadAnswer(questionNumber) {
         const savedAnswer = userAnswers[questionNumber];
         if (savedAnswer) {
-            const radioButton = document.querySelector(`input[name="answer"][value="${savedAnswer}"]`);
-            if (radioButton) {
-                radioButton.checked = true;
-            }
+            // Find the radio button by matching the label text
+            const labels = document.querySelectorAll('label');
+            labels.forEach(label => {
+                if (label.textContent.trim() === savedAnswer) {
+                    const radioId = label.getAttribute('for');
+                    const radioButton = document.getElementById(radioId);
+                    if (radioButton) {
+                        radioButton.checked = true;
+                    }
+                }
+            });
         }
     }
 
@@ -804,7 +819,7 @@
     }
 
     function handleTimeUp() {
-        submitQuiz(); // Submit otomatis ketika waktu habis
+        submit(); // Submit otomatis ketika waktu habis
     }
 
     // Jalankan timer ketika halaman dimuat
@@ -827,9 +842,9 @@
     let remainingTime = 600; // 10 menit dalam detik
 
     function submitQuiz() {
-        // Hitung durasi pengerjaan (10 menit - sisa waktu)
-        const finishTime = 600 - remainingTime; // dalam detik
-
+        // Simpan jawaban terakhir sebelum submit
+        saveAnswer();
+        
         // Kumpulkan semua jawaban
         const answers = {
             question_1: userAnswers[1] || null,
@@ -838,10 +853,10 @@
             question_4: userAnswers[4] || null,
             question_5: userAnswers[5] || null,
             quiz_id: {{ $quiz->id }},
-            finish_time: finishTime
+            finish_time: 600 - remainingTime
         };
 
-        // Kirim data ke server
+        // Kirim data ke endpoint submit
         fetch('/quiz/submit', {
             method: 'POST',
             headers: {
@@ -850,17 +865,37 @@
             },
             body: JSON.stringify(answers)
         })
-        .then(response => response.json())
+        .then(response => {
+            return response.json();
+        })
         .then(data => {
-            if (data.success) {
+            if (!data.success) {
+                if (data.limitReached) {
+                    Swal.fire({
+                        title: 'Peringatan',
+                        text: data.message,
+                        icon: 'warning',
+                        confirmButtonText: 'OK'
+                    }).then((result) => {
+                        window.location.href = '/dashboard';
+                    });
+                    return;
+                }
+                throw new Error(data.message);
+            }
+            // handle successful response
+            if (data.redirect_url) {
                 window.location.href = data.redirect_url;
-            } else {
-                alert('Terjadi kesalahan saat menyimpan jawaban: ' + data.message);
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Terjadi kesalahan saat menyimpan jawaban');
+            Swal.fire({
+                title: 'Error',
+                text: 'Terjadi kesalahan: ' + error.message,
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
         });
     }
 

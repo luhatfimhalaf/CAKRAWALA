@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\UserAnswer;
-use App\Models\Quiz;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -12,85 +11,180 @@ class UserAnswerController extends Controller
     public function submit(Request $request)
     {
         try {
+            // Debug
+            \Log::info('Received data:', $request->all());
+
             // Validasi input
-            $validated = $request->validate([
-                'question_1' => 'nullable|in:answer_a,answer_b,answer_c,answer_d',
-                'question_2' => 'nullable|in:answer_a,answer_b,answer_c,answer_d',
-                'question_3' => 'nullable|in:answer_a,answer_b,answer_c,answer_d',
-                'question_4' => 'nullable|in:answer_a,answer_b,answer_c,answer_d',
-                'question_5' => 'nullable|in:answer_a,answer_b,answer_c,answer_d',
+            $request->validate([
                 'quiz_id' => 'required|exists:quiz,id',
-                'finish_time' => 'required|integer|max:600'
+                'question_1' => 'nullable|string',
+                'question_2' => 'nullable|string',
+                'question_3' => 'nullable|string',
+                'question_4' => 'nullable|string',
+                'question_5' => 'nullable|string',
+                'finish_time' => 'required|integer'
             ]);
 
-            // Ambil course_id dari quiz
-            $quiz = Quiz::findOrFail($validated['quiz_id']);
-            $course_id = $quiz->course_id;
+            // Debug
+            \Log::info('User ID:', [Auth::id()]);
+            \Log::info('Quiz ID:', [$request->quiz_id]);
 
-            // Cek jumlah attempt
-            $attemptCount = UserAnswer::where('user_id', Auth::id())
-                                    ->where('quiz_id', $request->quiz_id)
-                                    ->count();
-
-            // Simpan jawaban
-            $userAnswer = UserAnswer::create([
-                'user_id' => Auth::id(),
-                'quiz_id' => $validated['quiz_id'],
-                'course_id' => $course_id,
-                'question_1' => $validated['question_1'],
-                'question_2' => $validated['question_2'],
-                'question_3' => $validated['question_3'],
-                'question_4' => $validated['question_4'],
-                'question_5' => $validated['question_5'],
-                'attempt' => $attemptCount + 1,
-                'finish_time' => $validated['finish_time']
-            ]);
-
-            // Ambil quiz untuk menghitung skor
-            $quizzes = Quiz::where('course_id', $userAnswer->quiz->course_id)->get();
-            
-            // Hitung skor
+            // Hitung score berdasarkan jawaban yang benar
+            $quiz = \App\Models\Quiz::with('questions')->findOrFail($request->quiz_id);
             $correctAnswers = 0;
-            for ($i = 1; $i <= 5; $i++) {
-                $questionField = "question_$i";
-                $quiz = $quizzes->where('question_no', $i)->first();
-                if ($userAnswer->$questionField === $quiz->right_answer) {
+            $totalQuestions = $quiz->questions->count();
+
+            foreach ($quiz->questions as $question) {
+                $questionField = "question_" . $question->question_no;
+                $userAnswer = $request->$questionField;
+                
+                if ($userAnswer === $question->right_answer) {
                     $correctAnswers++;
                 }
             }
-            
-            $score = ($correctAnswers / 5) * 100;
+
+            // Hitung persentase score
+            $score = ($totalQuestions > 0) ? ($correctAnswers / $totalQuestions) * 100 : 0;
+            $roundedScore = round($score);
+
+            // Cek apakah sudah ada jawaban untuk quiz ini
+            $existingAnswer = UserAnswer::where('user_id', Auth::id())
+                ->where('quiz_id', $request->quiz_id)
+                ->first();
+
+            if ($existingAnswer) {
+                $newAttempt = $existingAnswer->attempt + 1;
+                
+                // Cek jika attempt sudah mencapai 5
+                if ($newAttempt >= 5) {
+                    // Hapus semua data quiz untuk user ini
+                    UserAnswer::where('user_id', Auth::id())
+                        ->where('quiz_id', $request->quiz_id)
+                        ->delete();
+                    
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Anda telah mencapai batas maksimal 5 kali percobaan',
+                        'limitReached' => true
+                    ]);
+                }
+                
+                $existingAnswer->update([
+                    'question_1' => $request->question_1,
+                    'question_2' => $request->question_2,
+                    'question_3' => $request->question_3,
+                    'question_4' => $request->question_4,
+                    'question_5' => $request->question_5,
+                    'finish_time' => $request->finish_time,
+                    'attempt' => $newAttempt,
+                    'score' => $roundedScore
+                ]);
+
+                \Log::info('Answer updated with score:', [
+                    'quiz_id' => $request->quiz_id,
+                    'attempt' => $newAttempt,
+                    'score' => $roundedScore
+                ]);
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Jawaban berhasil diperbarui',
+                    'quiz_id' => $request->quiz_id,
+                    'attempt' => $newAttempt,
+                    'score' => $roundedScore,
+                    'redirect_url' => route('quiz.result', ['id' => $request->quiz_id])
+                ]);
+            }
+
+            // Jika tidak ada data sebelumnya, buat baru
+            UserAnswer::create([
+                'user_id' => Auth::id(),
+                'quiz_id' => $request->quiz_id,
+                'question_1' => $request->question_1,
+                'question_2' => $request->question_2,
+                'question_3' => $request->question_3,
+                'question_4' => $request->question_4,
+                'question_5' => $request->question_5,
+                'finish_time' => $request->finish_time,
+                'attempt' => 1,
+                'score' => $roundedScore
+            ]);
+
+            // Tambahkan logging sebelum return
+            \Log::info('About to return response:', [
+                'success' => true,
+                'message' => 'Jawaban berhasil disimpan',
+                'redirect_url' => route('quiz.result', ['id' => $request->quiz_id])
+            ]);
 
             return response()->json([
                 'success' => true,
-                'redirect_url' => route('quiz.result', ['id' => $userAnswer->id])
+                'message' => 'Jawaban berhasil disimpan',
+                'quiz_id' => $request->quiz_id,
+                'score' => $roundedScore,
+                'redirect_url' => route('quiz.result', ['id' => $request->quiz_id])
             ]);
 
         } catch (\Exception $e) {
+            // Perbaiki logging error untuk lebih detail
+            \Log::error('Error saving answers:', [
+                'error' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
             return response()->json([
                 'success' => false,
-                'message' => 'Error saving answers: ' . $e->getMessage()
+                'message' => 'Gagal menyimpan jawaban: ' . $e->getMessage()
             ], 500);
         }
     }
 
     public function result($id)
     {
-        $userAnswer = UserAnswer::with('quiz.course')->findOrFail($id);
-        $quizzes = Quiz::where('course_id', $userAnswer->quiz->course_id)->get();
+        // Ambil user answer beserta relasinya
+        $userAnswer = UserAnswer::with(['quiz.course', 'quiz.questions'])->findOrFail($id);
         
-        // Hitung skor
+        // Hitung skor dengan membandingkan jawaban user dengan jawaban benar
         $correctAnswers = 0;
-        for ($i = 1; $i <= 5; $i++) {
-            $questionField = "question_$i";
-            $quiz = $quizzes->where('question_no', $i)->first();
-            if ($userAnswer->$questionField === $quiz->right_answer) {
+        $totalQuestions = $userAnswer->quiz->questions->count();
+
+        // Loop melalui setiap pertanyaan di quiz
+        foreach ($userAnswer->quiz->questions as $question) {
+            $questionField = "question_" . $question->question_no;
+            $userAnswerValue = $userAnswer->$questionField;
+            $correctAnswer = $question->right_answer;
+
+            // Bandingkan jawaban user dengan jawaban benar dari tabel Question
+            if ($userAnswerValue === $correctAnswer) {
                 $correctAnswers++;
             }
+
+            // Log untuk debugging
+            \Log::info("Checking answer for question {$question->question_no}", [
+                'user_answer' => $userAnswerValue,
+                'correct_answer' => $correctAnswer,
+                'is_correct' => $userAnswerValue === $correctAnswer
+            ]);
         }
         
-        $score = ($correctAnswers / 5) * 100;
+        // Hitung persentase skor
+        $score = ($totalQuestions > 0) ? ($correctAnswers / $totalQuestions) * 100 : 0;
+        $roundedScore = round($score);
 
-        return view('quiz.result', compact('userAnswer', 'quizzes', 'score'));
+        // Log hasil akhir
+        \Log::info('Quiz result calculation', [
+            'quiz_id' => $userAnswer->quiz_id,
+            'user_id' => $userAnswer->user_id,
+            'total_questions' => $totalQuestions,
+            'correct_answers' => $correctAnswers,
+            'final_score' => $roundedScore
+        ]);
+
+        return view('quiz.result', [
+            'userAnswer' => $userAnswer,
+            'score' => $roundedScore
+        ]);
     }
 }

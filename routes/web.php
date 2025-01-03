@@ -60,7 +60,6 @@ Route::get('/transactions/{id}', [TransactionController::class, 'show'])->name('
 Route::get('/transactions/{id}/pay', [TransactionController::class, 'simulatePayment'])->name('transactions.pay');
 Route::post('/transactions', [TransactionController::class, 'store'])->name('transactions.store');
 
-
 use App\Http\Controllers\CourseController;
 Route::get('/kursus', [CourseController::class, 'index'])->name('kursus.index');
 Route::get('/kursus/{id}', [CourseController::class, 'show'])->name('kursus.detail');
@@ -73,25 +72,13 @@ Route::get('/pay-course/{id}', [PaymentController::class, 'payCourse'])->name('p
 Route::post('/payment', [PaymentController::class, 'createPayment']);
 
 use App\Http\Controllers\QuizController;
-// Rute untuk menampilkan daftar kuis
-Route::get('/quiz', [QuizController::class, 'index'])->name('quiz.index');
-// Rute untuk menampilkan detail kuis berdasarkan ID
-Route::get('/quiz/{id}', [QuizController::class, 'show'])->name('quiz.show');
-// Rute untuk memeriksa jawaban
-Route::post('/quiz/check-answer', [QuizController::class, 'checkAnswer'])->name('quiz.checkAnswer');
-// Rute untuk mendapatkan judul course berdasarkan course_id
-Route::get('/quiz/course-title/{course_id}', [QuizController::class, 'getCourseTitle'])->name('quiz.getCourseTitle');
-// Rute untuk mendapatkan gambar course berdasarkan course_id
-Route::get('/quiz/course-image/{course_id}', [QuizController::class, 'getImage'])->name('quiz.getImage');
-// Rute untuk mendapatkan kategori course berdasarkan course_id
-Route::get('/quiz/course-category/{course_id}', [QuizController::class, 'getCategory'])->name('quiz.getCategory');
-// Rute untuk mendapatkan pertanyaan berdasarkan course_id
-Route::get('/quiz/questions/{course_id}', [QuizController::class, 'getQuestion'])->name('quiz.getQuestion');
-
 use App\Http\Controllers\UserAnswerController;
-// Route untuk submit jawaban quiz
-Route::post('/quiz/submit', [UserAnswerController::class, 'submit'])->name('quiz.submit');
-
-// Route untuk menampilkan hasil quiz
-Route::get('/quiz/result/{id}', [UserAnswerController::class, 'result'])->name('quiz.result');
+use App\Http\Controllers\QuestionController;
+// Quiz routes
+Route::prefix('quiz')->group(function () {
+    Route::get('/', [QuizController::class, 'index'])->name('quiz.index');
+    Route::get('/{id}', [QuizController::class, 'show'])->name('quiz.show');
+    Route::get('/{id}/result', [UserAnswerController::class, 'result'])->name('quiz.result');
+    Route::post('/submit', [UserAnswerController::class, 'submit'])->name('quiz.submit');
+});
 
