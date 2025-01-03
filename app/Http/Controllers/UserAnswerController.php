@@ -29,6 +29,7 @@ class UserAnswerController extends Controller
             \Log::info('User ID:', [Auth::id()]);
             \Log::info('Quiz ID:', [$request->quiz_id]);
 
+<<<<<<< Updated upstream
             // Hitung score berdasarkan jawaban yang benar
             $quiz = \App\Models\Quiz::with('questions')->findOrFail($request->quiz_id);
             $correctAnswers = 0;
@@ -95,6 +96,21 @@ class UserAnswerController extends Controller
                     'redirect_url' => route('quiz.result', ['id' => $request->quiz_id])
                 ]);
             }
+=======
+        if ($existingAnswer) {
+            $newAttempt = $existingAnswer->attempt + 1;
+            
+            $existingAnswer->update([
+                'question_1' => $request->question_1,
+                'question_2' => $request->question_2,
+                'question_3' => $request->question_3,
+                'question_4' => $request->question_4,
+                'question_5' => $request->question_5,
+                'finish_time' => $request->finish_time,
+                'attempt' => $newAttempt,
+                'score' => $score
+            ]);
+>>>>>>> Stashed changes
 
             // Jika tidak ada data sebelumnya, buat baru
             UserAnswer::create([
@@ -143,8 +159,11 @@ class UserAnswerController extends Controller
 
     public function result($id)
     {
-        // Ambil user answer beserta relasinya
-        $userAnswer = UserAnswer::with(['quiz.course', 'quiz.questions'])->findOrFail($id);
+        // Ubah cara mengambil user answer
+        $userAnswer = UserAnswer::with(['quiz.course', 'quiz.questions'])
+            ->where('quiz_id', $id)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
         
         // Hitung skor dengan membandingkan jawaban user dengan jawaban benar
         $correctAnswers = 0;
@@ -186,5 +205,15 @@ class UserAnswerController extends Controller
             'userAnswer' => $userAnswer,
             'score' => $roundedScore
         ]);
+    }
+
+    public function resetAttempts($quiz_id)
+    {
+        UserAnswer::where('quiz_id', $quiz_id)
+            ->where('user_id', Auth::id())
+            ->delete();
+
+        return redirect()->route('quiz.index')
+            ->with('success', 'Data quiz anda telah direset. Silahkan pelajari kembali materi course ini.');
     }
 }
