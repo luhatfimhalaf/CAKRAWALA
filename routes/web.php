@@ -101,3 +101,4 @@ Route::middleware(['auth'])->group(function () {
 
 
 
+Route::delete('/quiz/reset-attempts/{quiz_id}', [UserAnswerController::class, 'resetAttempts'])->name('quiz.reset-attempts');

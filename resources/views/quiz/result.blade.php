@@ -101,6 +101,59 @@
             justify-content: space-between;
             align-items: center;
         }
+
+        .modal-warning-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1rem;
+            animation: warningBounce 1s ease-in-out;
+        }
+
+        .modal-content {
+            transform: scale(0.7);
+            opacity: 0;
+            animation: modalPop 0.3s ease-out forwards;
+        }
+
+        @keyframes warningBounce {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes modalPop {
+            0% { transform: scale(0.7); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-body {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .modal-header {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .modal-footer {
+            border-top: none;
+            justify-content: center;
+            padding-top: 0;
+        }
+
+        .btn-primary {
+            background-color: #19535f;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #133d47;
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 <body>
@@ -168,5 +221,46 @@
             </div>
         </div>
     </div>
+
+    @php
+        $attempt = $userAnswer->attempt;
+        $score = $userAnswer->score
+    @endphp
+
+    @if($attempt >= 5 && $score < 80)
+    <!-- Modal -->
+    <div class="modal fade" id="failureModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="failureModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title w-100 text-center" id="failureModalLabel">Peringatan</h5>
+                </div>
+                <div class="modal-body">
+                    <img src="{{ asset('images/warning-icon.svg') }}" class="modal-warning-icon" alt="Warning">
+                    <p class="mb-3"><strong>Anda telah mencoba sebanyak {{ $attempt }} kali dan belum mencapai nilai minimal 80.</strong></p>
+                    <p class="text-muted">Anda harus mengulang kembali course ini dari awal.</p>
+                </div>
+                <div class="modal-footer">
+                    <form action="{{ route('quiz.reset-attempts', $userAnswer->quiz_id) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-primary">
+                            OK, Saya Mengerti
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Bootstrap JS and show modal -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var myModal = new bootstrap.Modal(document.getElementById('failureModal'));
+            myModal.show();
+        });
+    </script>
+    @endif
 </body>
 </html> 

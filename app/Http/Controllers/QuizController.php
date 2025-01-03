@@ -52,4 +52,6 @@ class QuizController extends Controller
         // Kirim data ke view
         return view('quiz.show', compact('quiz', 'questions'));
     }
+
+    
 }

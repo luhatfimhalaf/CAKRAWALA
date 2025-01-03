@@ -476,6 +476,66 @@
             opacity: 0;
             transform: translateX(20px);
         }
+
+        /* Style untuk preview button */
+        .preview-btn {
+            background: #19535f;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .preview-btn:hover {
+            background: #133d47;
+        }
+
+        /* Style untuk preview modal */
+        .answer-preview {
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 20px;
+            color: #19535f;
+        }
+
+        .answer-preview h2 {
+            color: #19535f;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .preview-item {
+            background: #f9f9f9;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .preview-item h4 {
+            color: #19535f;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .preview-answer {
+            color: #333;
+            margin-left: 20px;
+            font-size: 0.95rem;
+        }
+
+        .no-answer {
+            color: #dc3545;
+            font-style: italic;
+        }
     </style>
 </head>
 <body>
@@ -845,7 +905,79 @@
         // Simpan jawaban terakhir sebelum submit
         saveAnswer();
         
-        // Kumpulkan semua jawaban
+        // Periksa jawaban yang belum dijawab
+        const unansweredQuestions = [];
+        for (let i = 1; i <= 5; i++) {
+            if (!userAnswers[i]) {
+                unansweredQuestions.push(i);
+            }
+        }
+
+        // Jika ada pertanyaan yang belum dijawab, tampilkan warning
+        if (unansweredQuestions.length > 0) {
+            Swal.fire({
+                title: 'Peringatan',
+                html: `Ada ${unansweredQuestions.length} soal yang belum dijawab:<br>Nomor ${unansweredQuestions.join(', ')}<br><br>Apakah Anda ingin melihat preview jawaban?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#19535f',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Lihat Preview',
+                cancelButtonText: 'Kembali'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    showAnswerPreviewBeforeSubmit();
+                }
+            });
+        } else {
+            // Jika semua pertanyaan sudah dijawab, tampilkan preview
+            showAnswerPreviewBeforeSubmit();
+        }
+    }
+
+    function showAnswerPreviewBeforeSubmit() {
+        let previewContent = '<div class="answer-preview">';
+        previewContent += '<h2>Preview Jawaban</h2>';
+
+        // Loop through all questions
+        for (let i = 1; i <= 5; i++) {
+            const question = questions.find(q => q.question_no === i);
+            previewContent += `
+                <div class="preview-item">
+                    <h4>Soal ${i}</h4>
+                    <div class="preview-answer">
+                        ${userAnswers[i] ? 
+                            `Jawaban: ${userAnswers[i]}` : 
+                            '<span class="no-answer">Belum dijawab</span>'}
+                    </div>
+                </div>
+            `;
+        }
+
+        previewContent += '</div>';
+
+        Swal.fire({
+            title: 'Preview Jawaban',
+            html: previewContent,
+            width: '600px',
+            showCancelButton: true,
+            showConfirmButton: true,
+            confirmButtonColor: '#19535f',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Submit Quiz',
+            cancelButtonText: 'Kembali',
+            customClass: {
+                popup: 'answer-preview'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                submitAnswers(); // Lanjut ke proses submit jika user mengkonfirmasi
+            }
+        });
+    }
+
+    // Fungsi untuk mengirim jawaban ke server
+    function submitAnswers() {
         const answers = {
             question_1: userAnswers[1] || null,
             question_2: userAnswers[2] || null,
@@ -856,7 +988,6 @@
             finish_time: 600 - remainingTime
         };
 
-        // Kirim data ke endpoint submit
         fetch('/quiz/submit', {
             method: 'POST',
             headers: {
@@ -920,6 +1051,39 @@
                 handleTimeUp();
             }
         }, 1000);
+    }
+
+    function showAnswerPreview() {
+        let previewContent = '<div class="answer-preview">';
+        previewContent += '<h2>Preview Jawaban</h2>';
+
+        // Loop through all questions
+        for (let i = 1; i <= 5; i++) {
+            const question = questions.find(q => q.question_no === i);
+            previewContent += `
+                <div class="preview-item">
+                    <h4>Soal ${i}</h4>
+                    <div class="preview-answer">
+                        ${userAnswers[i] ? 
+                            `Jawaban: ${userAnswers[i]}` : 
+                            '<span class="no-answer">Belum dijawab</span>'}
+                    </div>
+                </div>
+            `;
+        }
+
+        previewContent += '</div>';
+
+        Swal.fire({
+            html: previewContent,
+            width: '600px',
+            showCloseButton: true,
+            showConfirmButton: false,
+            customClass: {
+                popup: 'answer-preview'
+            },
+            background: 'transparent'
+        });
     }
 </script>
 </body>
