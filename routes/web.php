@@ -78,7 +78,7 @@ use App\Http\Controllers\QuestionController;
 Route::prefix('quiz')->group(function () {
     Route::get('/', [QuizController::class, 'index'])->name('quiz.index');
     Route::get('/{id}', [QuizController::class, 'show'])->name('quiz.show');
-    Route::get('/{id}/result', [UserAnswerController::class, 'result'])->name('quiz.result');
+    Route::get('/{quiz_id}/result', [UserAnswerController::class, 'result'])->name('quiz.result');
     Route::post('/submit', [UserAnswerController::class, 'submit'])->name('quiz.submit');
 });
 
